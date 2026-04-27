@@ -2,12 +2,12 @@ package com.github.catbert.tlmv.handler;
 
 import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.capability.ModCapabilities;
-import com.github.catbert.tlmv.capability.VampireMaidCapability;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,12 +32,8 @@ public class MaidGuiOverlayHandler {
             return;
         }
 
-        VampireMaidCapability cap = capOpt.get();
-        int level = cap.getVampireLevel();
-        String displayText = VampireMaidCapability.getVampireDisplayPrefix(level);
-        if (displayText.endsWith("-")) {
-            displayText = displayText.substring(0, displayText.length() - 1);
-        }
+        int level = capOpt.get().getVampireLevel();
+        Component displayText = Component.translatable("gui.touhou_little_maid_vampirism.vampire_rank." + level);
 
         GuiGraphics graphics = event.getGuiGraphics();
         Font font = Minecraft.getInstance().font;

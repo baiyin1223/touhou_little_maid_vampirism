@@ -3,6 +3,8 @@ package com.github.catbert.tlmv.command;
 import com.github.catbert.tlmv.capability.ModCapabilities;
 import com.github.catbert.tlmv.capability.VampireMaidCapability;
 import com.github.catbert.tlmv.level.VampireLevelManager;
+import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
+import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -14,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
@@ -81,6 +84,11 @@ public class VampirismMaidCommand {
             source.sendSuccess(() -> Component.literal("已将女仆恢复为普通状态"), true);
         }
 
+        TLMVNetwork.INSTANCE.send(
+                PacketDistributor.TRACKING_ENTITY.with(() -> target),
+                new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel())
+        );
+
         return 1;
     }
 
@@ -122,6 +130,12 @@ public class VampirismMaidCommand {
         if (target instanceof com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid maid) {
             VampireLevelManager.applyLevel(maid, level);
         }
+
+        TLMVNetwork.INSTANCE.send(
+                PacketDistributor.TRACKING_ENTITY.with(() -> target),
+                new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel())
+        );
+
         source.sendSuccess(() -> Component.translatable("message.touhou_little_maid_vampirism.level_set", level), true);
         return 1;
     }
