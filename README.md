@@ -5,7 +5,7 @@
 
 **What if your beloved TouhouLittleMaid could embrace the dark gift of vampirism?**
 
-This addon bridges **TouhouLittleMaid** and **Vampirism**, bringing a fully integrated vampire experience to your maids — complete with blood hunger, sunlight vulnerability, and the thrill of the hunt.
+This mod bridges **TouhouLittleMaid** and **Vampirism**, bringing a fully integrated vampire experience to your maids — complete with blood hunger, sunlight vulnerability, and the thrill of the hunt.
 
 ---
 
