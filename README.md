@@ -40,4 +40,4 @@ This mod bridges **TouhouLittleMaid** and **Vampirism**, bringing a fully integr
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [GNU Lesser General Public License v3.0 or later](LICENSE) (SPDX: `LGPL-3.0-or-later`).
