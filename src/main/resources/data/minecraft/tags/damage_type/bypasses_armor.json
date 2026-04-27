@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-        "touhou_little_maid_vampirism:blood_starvation"
+        "touhou_little_maid_vampirism:blood_starvation",
+        "touhou_little_maid_vampirism:garlic_damage"
     ]
 }

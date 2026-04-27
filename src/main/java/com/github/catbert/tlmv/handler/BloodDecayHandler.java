@@ -7,12 +7,16 @@ import com.github.catbert.tlmv.init.ModDamageTypes;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,6 +24,10 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = TLMVMain.MOD_ID)
 public class BloodDecayHandler {
+
+    private static MobEffect getGarlicEffect() {
+        return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("vampirism", "garlic"));
+    }
 
     /**
      * 主 tick 逻辑：反自动恢复 + 血量衰减 + blood=0 HP伤害
@@ -30,11 +38,13 @@ public class BloodDecayHandler {
         if (living.level().isClientSide()) return;
         if (!(living instanceof EntityMaid maid)) return;
 
-        ModCapabilities.getVampireMaid(maid).ifPresent(cap -> {
-            if (!cap.isVampire()) return;
-            if (!BloodConfig.BLOOD_DECAY_ENABLED.get()) return;
+        var capOpt = ModCapabilities.getVampireMaid(maid);
+        if (!capOpt.isPresent()) return;
+        var cap = capOpt.orElse(null);
+        if (cap == null || !cap.isVampire()) return;
+        if (!BloodConfig.BLOOD_DECAY_ENABLED.get()) return;
 
-            VampirismAPI.getExtendedCreatureVampirism(maid).ifPresent(ext -> {
+        VampirismAPI.getExtendedCreatureVampirism(maid).ifPresent(ext -> {
                 int currentBlood = ext.getBlood();
                 int maxBlood = ext.getMaxBlood();
 
@@ -99,6 +109,14 @@ public class BloodDecayHandler {
                     cap.setBloodDecayTimer(0);
                     cap.setSlowDecayTimer(0);
 
+                    // === blood = 0：施加 Slowness II（比大蒜的 Slowness I 更强） ===
+                    MobEffectInstance currentSlowness = maid.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+                    if (currentSlowness == null || currentSlowness.getAmplifier() < 1) {
+                        cap.setApplyingSlowness(true);
+                        maid.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1, false, false, true));
+                        cap.setApplyingSlowness(false);
+                    }
+
                     int starvTimer = cap.getStarvationTimer() + 1;
                     int hpInterval = BloodConfig.BLOOD_STARVATION_HP_INTERVAL.get();
                     if (starvTimer >= hpInterval) {
@@ -114,16 +132,81 @@ public class BloodDecayHandler {
                             );
                             maid.hurt(source, Float.MAX_VALUE);
                         } else {
-                            // 真实伤害：直接扣血，无视一切减伤
-                            maid.setHealth(currentHp - damage);
-                            // 触发受伤动画和音效
-                            maid.level().broadcastEntityEvent(maid, (byte) 2);
+                            // 使用 hurt() 触发标准受伤动画和音效流程
+                            // 然后用 setHealth 精确控制最终血量（避免被护甲/保护等减伤影响实际扣血量）
+                            DamageSource source = new DamageSource(
+                                maid.level().registryAccess()
+                                    .lookupOrThrow(Registries.DAMAGE_TYPE)
+                                    .getOrThrow(ModDamageTypes.BLOOD_STARVATION)
+                            );
+                            float expectedHealth = currentHp - damage;
+                            maid.hurt(source, damage);
+                            // hurt() 可能被护甲/保护减伤，用 setHealth 确保扣血量准确
+                            if (maid.getHealth() != expectedHealth) {
+                                maid.setHealth(expectedHealth);
+                            }
                         }
                     }
                     cap.setStarvationTimer(starvTimer);
                 }
+
+                // === 大蒜效果检测 ===
+                MobEffect garlicEffect = getGarlicEffect();
+                if (garlicEffect != null && maid.hasEffect(garlicEffect) && BloodConfig.GARLIC_DAMAGE_ENABLED.get()) {
+                    int level = cap.getVampireLevel();
+
+                    if (level >= 5) {
+                        // 等级5：完全免疫大蒜效果（所有惩罚全部跳过）
+                        cap.setGarlicHpTicker(0);
+                        cap.setGarlicBloodTicker(0);
+                        maid.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+                    } else {
+                        // 施加/维持 Slowness I
+                        if (!maid.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
+                            cap.setApplyingSlowness(true);
+                            maid.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0, false, false, true));
+                            cap.setApplyingSlowness(false);
+                        }
+
+                        // HP 伤害（等级 >= 3 免疫）
+                        if (level < 3) {
+                            int garlicHpTicker = cap.getGarlicHpTicker() + 1;
+                            if (garlicHpTicker >= BloodConfig.GARLIC_HP_INTERVAL.get()) {
+                                garlicHpTicker = 0;
+                                float damage = BloodConfig.GARLIC_HP_DAMAGE.get().floatValue();
+                                float currentHp = maid.getHealth();
+                                DamageSource source = new DamageSource(
+                                    maid.level().registryAccess()
+                                        .lookupOrThrow(Registries.DAMAGE_TYPE)
+                                        .getOrThrow(ModDamageTypes.GARLIC_DAMAGE)
+                                );
+                                if (currentHp - damage <= 0) {
+                                    maid.hurt(source, Float.MAX_VALUE);
+                                } else {
+                                    maid.hurt(source, damage);
+                                }
+                            }
+                            cap.setGarlicHpTicker(garlicHpTicker);
+                        } else {
+                            cap.setGarlicHpTicker(0);
+                        }
+
+                        // Blood 加速消耗（等级 < 5 都受）
+                        int garlicBloodTicker = cap.getGarlicBloodTicker() + 1;
+                        if (garlicBloodTicker >= BloodConfig.GARLIC_BLOOD_DECAY_INTERVAL.get()) {
+                            garlicBloodTicker = 0;
+                            int newBlood = Math.max(0, ext.getBlood() - 1);
+                            ext.setBlood(newBlood);
+                            cap.setLastKnownBlood(newBlood);
+                            syncBlood(ext);
+                        }
+                        cap.setGarlicBloodTicker(garlicBloodTicker);
+                    }
+                } else {
+                    cap.setGarlicHpTicker(0);
+                    cap.setGarlicBloodTicker(0);
+                }
             });
-        });
     }
 
     /**
@@ -138,7 +221,7 @@ public class BloodDecayHandler {
         ModCapabilities.getVampireMaid(entity).ifPresent(cap -> {
             if (cap.isVampire()) {
                 var effect = event.getEffectInstance().getEffect();
-                if (effect == MobEffects.WEAKNESS || effect == MobEffects.MOVEMENT_SLOWDOWN) {
+                if (effect == MobEffects.WEAKNESS || (effect == MobEffects.MOVEMENT_SLOWDOWN && !cap.isApplyingSlowness())) {
                     event.setResult(Event.Result.DENY);
                 }
             }
@@ -148,30 +231,44 @@ public class BloodDecayHandler {
     /**
      * 拦截 Vampirism 在 blood=0 时对吸血鬼女仆造成的致死伤害
      * 只拦截非我方的伤害（我方的 blood_starvation 正常通过）
+     * 使用 LivingAttackEvent 在 hurt() 流程最早阶段拦截，避免受伤动画被触发
      */
     @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent event) {
+    public static void onLivingAttack(LivingAttackEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity.level().isClientSide()) return;
-        if (!(entity instanceof EntityMaid)) return;
+        if (!(entity instanceof EntityMaid maid)) return;
 
         ModCapabilities.getVampireMaid(entity).ifPresent(cap -> {
-            if (!cap.isVampire()) return;
-
-            DamageSource source = event.getSource();
-            // 如果是我方的 blood_starvation 伤害，正常通过
-            if (source.typeHolder().is(ModDamageTypes.BLOOD_STARVATION)) {
+            if (!cap.isVampire()) {
                 return;
             }
 
-            // 检查是否来自 Vampirism 的血量相关伤害
-            // Vampirism 使用 "vampirism:blood_starvation" 或类似的 DamageType
-            // 通用策略：当女仆 blood=0 时，拦截来自 Vampirism 的伤害
-            VampirismAPI.getExtendedCreatureVampirism((PathfinderMob) entity).ifPresent(ext -> {
-                if (ext.getBlood() <= 0) {
-                    String msgId = source.getMsgId();
-                    // 拦截 Vampirism 的血饥饿伤害（DamageType msgId 包含 vampirism 或 blood）
-                    if (msgId != null && (msgId.contains("vampirism") || msgId.contains("blood"))) {
+            DamageSource source = event.getSource();
+            String msgId = source.getMsgId();
+            boolean isBloodStarvation = source.typeHolder().is(ModDamageTypes.BLOOD_STARVATION);
+            boolean isGarlicDamage = source.typeHolder().is(ModDamageTypes.GARLIC_DAMAGE);
+
+            // 如果是我方的 blood_starvation 伤害，正常通过
+            if (isBloodStarvation) {
+                return;
+            }
+            // 如果是我方的 garlic_damage 伤害，正常通过
+            if (isGarlicDamage) {
+                return;
+            }
+
+            // 额外通过 msgId 双重保险（适配 "modid.message_id" 格式，如 touhou_little_maid_vampirism.blood_starvation）
+            if (msgId != null && (msgId.contains("blood_starvation") || msgId.contains("garlic_damage"))) {
+                return;
+            }
+
+            // 检查是否来自 Vampirism 的 blood_loss 伤害
+            // Vampirism 在 blood=0 时使用的 DamageType msgId 是 "blood_loss"（ResourceKey: vampirism:blood_loss）
+            VampirismAPI.getExtendedCreatureVampirism(maid).ifPresent(ext -> {
+                int blood = ext.getBlood();
+                if (blood <= 0) {
+                    if ("blood_loss".equals(msgId)) {
                         event.setCanceled(true);
                     }
                 }

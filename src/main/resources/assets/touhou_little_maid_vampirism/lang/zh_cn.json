@@ -72,6 +72,8 @@
     "task.touhou_little_maid_vampirism.collect_blood.condition.has_container": "背包内有玻璃瓶或未满的血瓶",
     "death.attack.touhou_little_maid_vampirism.blood_starvation": "%1$s 血渴而死",
     "death.attack.touhou_little_maid_vampirism.blood_starvation.player": "%1$s 在 %2$s 的疏忽下血渴而死",
+    "death.attack.touhou_little_maid_vampirism.garlic_damage": "%1$s 被大蒜折磨致死",
+    "death.attack.touhou_little_maid_vampirism.garlic_damage.player": "%1$s 在 %2$s 的大蒜攻势下死亡",
     "config.touhou_little_maid_vampirism.blood.decay_enabled": "血值自然消耗",
     "config.touhou_little_maid_vampirism.blood.decay_enabled.tooltip": "是否启用吸血鬼女仆血值随时间自然消耗",
     "config.touhou_little_maid_vampirism.blood.starvation_hp_damage": "血渴伤害量",
@@ -85,5 +87,13 @@
     "config.touhou_little_maid_vampirism.blood.auto_feed_range": "自动觅血范围",
     "config.touhou_little_maid_vampirism.blood.auto_feed_range.tooltip": "自动觅血目标搜索范围（格）",
     "config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount": "自动觅血汲取量",
-    "config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount.tooltip": "每次自动觅血汲取的血液量"
+    "config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount.tooltip": "每次自动觅血汲取的血液量",
+    "config.touhou_little_maid_vampirism.blood.garlic_damage_enabled": "大蒜伤害",
+    "config.touhou_little_maid_vampirism.blood.garlic_damage_enabled.tooltip": "是否启用大蒜效果对吸血鬼女仆的伤害（等级≥3免疫HP伤害，等级=5完全免疫）",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_damage": "大蒜HP伤害量",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_damage.tooltip": "大蒜效果每次造成的HP伤害",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_interval": "大蒜HP伤害间隔",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_interval.tooltip": "大蒜效果HP伤害间隔（刻，50=2.5秒）",
+    "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval": "大蒜血值消耗间隔",
+    "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval.tooltip": "大蒜效果额外血值消耗间隔（刻，200=10秒）"
 }

@@ -72,6 +72,8 @@
     "task.touhou_little_maid_vampirism.collect_blood.condition.has_container": "Has glass bottle or unfilled blood bottle in inventory",
     "death.attack.touhou_little_maid_vampirism.blood_starvation": "%1$s died of blood starvation",
     "death.attack.touhou_little_maid_vampirism.blood_starvation.player": "%1$s died of blood starvation due to %2$s's negligence",
+    "death.attack.touhou_little_maid_vampirism.garlic_damage": "%1$s was tormented to death by garlic",
+    "death.attack.touhou_little_maid_vampirism.garlic_damage.player": "%1$s died under %2$s's garlic assault",
     "config.touhou_little_maid_vampirism.blood.decay_enabled": "Blood Natural Decay",
     "config.touhou_little_maid_vampirism.blood.decay_enabled.tooltip": "Whether vampire maid blood naturally decays over time",
     "config.touhou_little_maid_vampirism.blood.starvation_hp_damage": "Starvation HP Damage",
@@ -85,5 +87,13 @@
     "config.touhou_little_maid_vampirism.blood.auto_feed_range": "Auto Feed Range",
     "config.touhou_little_maid_vampirism.blood.auto_feed_range.tooltip": "Search range for auto-feed targets (blocks)",
     "config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount": "Auto Feed Extract Amount",
-    "config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount.tooltip": "Blood amount extracted per auto-feed action"
+    "config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount.tooltip": "Blood amount extracted per auto-feed action",
+    "config.touhou_little_maid_vampirism.blood.garlic_damage_enabled": "Garlic Damage",
+    "config.touhou_little_maid_vampirism.blood.garlic_damage_enabled.tooltip": "Whether garlic effect damages vampire maids (Level >= 3 immune to HP damage, Level = 5 fully immune)",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_damage": "Garlic HP Damage",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_damage.tooltip": "HP damage per garlic effect tick",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_interval": "Garlic HP Interval",
+    "config.touhou_little_maid_vampirism.blood.garlic_hp_interval.tooltip": "Interval in ticks for garlic HP damage (50 = 2.5 seconds)",
+    "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval": "Garlic Blood Decay Interval",
+    "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval.tooltip": "Interval in ticks for extra blood decay from garlic (200 = 10 seconds)"
 }

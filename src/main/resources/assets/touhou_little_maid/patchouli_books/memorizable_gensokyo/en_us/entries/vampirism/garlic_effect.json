@@ -1,0 +1,18 @@
+{
+    "sortnum": 5,
+    "name": "Garlic Effect and Hunter Threat",
+    "icon": "vampirism:item_garlic",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Garlic Effect",
+            "text": "Vampire maids are affected by garlic effects.$(br2)Sources of garlic effect include:$(br)$(li)Garlic Diffuser (area effect)$(li)Mature Garlic Plant (contact trigger)$(li)Splash Garlic Bottle (thrown area)$(br2)While under garlic effect, the maid suffers the following penalties:$(br)$(li)Slowness I is applied$(li)Accelerated blood consumption (default: 1 extra blood point per 200 ticks)$(li)Continuous HP damage (default: 1.0 damage per 50 ticks, about half the frequency of poison)$(br2)If blood is depleted by garlic effect, the maid may die of blood thirst.$(br2)As the vampire level increases, the maid's resistance to garlic improves:$(br)$(li)Level ≥ 3: immune to garlic HP damage (but still affected by slowness and accelerated blood consumption)$(li)Level = 5: completely immune to all garlic effects"
+        },
+        {
+            "type": "text",
+            "title": "Hunter Threat",
+            "text": "Hunters from Vampirism (including normal and advanced hunters) will treat vampire maids as hostile targets.$(br2)Normal maids will not be attacked by hunters.$(br2)It is recommended to keep vampire maids away from hunter camps and hunter patrol areas to avoid unnecessary combat.$(br2)Garlic damage effect can be disabled through the mod configuration."
+        }
+    ]
+}

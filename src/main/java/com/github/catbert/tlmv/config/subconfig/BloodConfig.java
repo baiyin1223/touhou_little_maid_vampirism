@@ -12,6 +12,12 @@ public final class BloodConfig {
     public static ForgeConfigSpec.IntValue AUTO_FEED_RANGE;
     public static ForgeConfigSpec.IntValue AUTO_FEED_EXTRACT_AMOUNT;
 
+    // Garlic effect settings
+    public static ForgeConfigSpec.BooleanValue GARLIC_DAMAGE_ENABLED;
+    public static ForgeConfigSpec.DoubleValue GARLIC_HP_DAMAGE;
+    public static ForgeConfigSpec.IntValue GARLIC_HP_INTERVAL;
+    public static ForgeConfigSpec.IntValue GARLIC_BLOOD_DECAY_INTERVAL;
+
     public static void init(ForgeConfigSpec.Builder builder) {
         builder.push("blood");
         BLOOD_DECAY_ENABLED = builder
@@ -38,6 +44,20 @@ public final class BloodConfig {
         AUTO_FEED_EXTRACT_AMOUNT = builder
                 .comment("Blood amount extracted per auto-feed action")
                 .defineInRange("autoFeedExtractAmount", 8, 1, 10);
+
+        // Garlic effect settings
+        GARLIC_DAMAGE_ENABLED = builder
+                .comment("Whether garlic effect damages vampire maids")
+                .define("garlicDamageEnabled", true);
+        GARLIC_HP_DAMAGE = builder
+                .comment("HP damage amount per garlic tick")
+                .defineInRange("garlicHpDamage", 1.0, 0.0, 20.0);
+        GARLIC_HP_INTERVAL = builder
+                .comment("Interval in ticks for garlic HP damage (50 = 2.5 seconds)")
+                .defineInRange("garlicHpInterval", 50, 1, 1200);
+        GARLIC_BLOOD_DECAY_INTERVAL = builder
+                .comment("Interval in ticks for extra blood decay from garlic (200 = 10 seconds)")
+                .defineInRange("garlicBloodDecayInterval", 200, 1, 1200);
         builder.pop();
     }
 }

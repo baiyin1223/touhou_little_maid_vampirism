@@ -17,6 +17,13 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
     private int slowDecayTimer = 0;    // 低血量慢速衰减计时器
     private int starvationTimer = 0;   // blood=0 HP伤害计时器
 
+    // Garlic effect tracking fields
+    private int garlicHpTicker = 0;       // 大蒜HP伤害计时器
+    private int garlicBloodTicker = 0;    // 大蒜额外blood消耗计时器
+
+    // Garlic slowness tracking
+    private transient boolean applyingSlowness = false;
+
     // Auto-feed state tracking fields
     private int autoFeedTimer = 0;           // 觅血间隔计时器
     private java.util.UUID autoFeedTargetUUID = null;  // 当前觅血目标 UUID
@@ -47,6 +54,14 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
         this.vampireLevel = Math.max(0, Math.min(5, level));
     }
 
+    public boolean isApplyingSlowness() {
+        return applyingSlowness;
+    }
+
+    public void setApplyingSlowness(boolean applyingSlowness) {
+        this.applyingSlowness = applyingSlowness;
+    }
+
     public int getLastKnownBlood() { return lastKnownBlood; }
     public void setLastKnownBlood(int blood) { this.lastKnownBlood = blood; }
 
@@ -58,6 +73,12 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
 
     public int getStarvationTimer() { return starvationTimer; }
     public void setStarvationTimer(int timer) { this.starvationTimer = timer; }
+
+    public int getGarlicHpTicker() { return garlicHpTicker; }
+    public void setGarlicHpTicker(int ticker) { this.garlicHpTicker = ticker; }
+
+    public int getGarlicBloodTicker() { return garlicBloodTicker; }
+    public void setGarlicBloodTicker(int ticker) { this.garlicBloodTicker = ticker; }
 
     public int getAutoFeedTimer() { return autoFeedTimer; }
     public void setAutoFeedTimer(int timer) { this.autoFeedTimer = timer; }
@@ -103,6 +124,8 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
         tag.putInt("bloodDecayTimer", bloodDecayTimer);
         tag.putInt("slowDecayTimer", slowDecayTimer);
         tag.putInt("starvationTimer", starvationTimer);
+        tag.putInt("garlicHpTicker", garlicHpTicker);
+        tag.putInt("garlicBloodTicker", garlicBloodTicker);
         tag.putInt("autoFeedTimer", autoFeedTimer);
         tag.putInt("autoFeedState", autoFeedState);
         tag.putInt("autoFeedMoveTimer", autoFeedMoveTimer);
@@ -137,6 +160,8 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
         this.bloodDecayTimer = tag.getInt("bloodDecayTimer");
         this.slowDecayTimer = tag.getInt("slowDecayTimer");
         this.starvationTimer = tag.getInt("starvationTimer");
+        this.garlicHpTicker = tag.contains("garlicHpTicker") ? tag.getInt("garlicHpTicker") : 0;
+        this.garlicBloodTicker = tag.contains("garlicBloodTicker") ? tag.getInt("garlicBloodTicker") : 0;
         this.autoFeedTimer = tag.getInt("autoFeedTimer");
         this.autoFeedState = tag.getInt("autoFeedState");
         this.autoFeedMoveTimer = tag.getInt("autoFeedMoveTimer");

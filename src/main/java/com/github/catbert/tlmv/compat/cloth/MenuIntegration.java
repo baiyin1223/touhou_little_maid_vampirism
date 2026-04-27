@@ -97,12 +97,101 @@ public class MenuIntegration {
         ConfigCategory category = root.getOrCreateCategory(
                 Component.translatable("config.touhou_little_maid_vampirism.blood"));
 
+        category.addEntry(entryBuilder.startBooleanToggle(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.decay_enabled"),
+                        BloodConfig.BLOOD_DECAY_ENABLED.get())
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.decay_enabled.tooltip"))
+                .setSaveConsumer(BloodConfig.BLOOD_DECAY_ENABLED::set)
+                .build());
+
         category.addEntry(entryBuilder.startIntSlider(
                         Component.translatable("config.touhou_little_maid_vampirism.blood.weakness_threshold"),
                         BloodConfig.LOW_BLOOD_WEAKNESS_THRESHOLD.get(), 0, 10)
                 .setDefaultValue(4)
                 .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.weakness_threshold.tooltip"))
                 .setSaveConsumer(BloodConfig.LOW_BLOOD_WEAKNESS_THRESHOLD::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.starvation_hp_damage"),
+                        BloodConfig.BLOOD_STARVATION_HP_DAMAGE.get(), 1, 20)
+                .setDefaultValue(1)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.starvation_hp_damage.tooltip"))
+                .setSaveConsumer(BloodConfig.BLOOD_STARVATION_HP_DAMAGE::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.starvation_hp_interval"),
+                        BloodConfig.BLOOD_STARVATION_HP_INTERVAL.get(), 20, 1200)
+                .setDefaultValue(60)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.starvation_hp_interval.tooltip"))
+                .setSaveConsumer(BloodConfig.BLOOD_STARVATION_HP_INTERVAL::set)
+                .build());
+
+        category.addEntry(entryBuilder.startBooleanToggle(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_enabled"),
+                        BloodConfig.AUTO_FEED_ENABLED.get())
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_enabled.tooltip"))
+                .setSaveConsumer(BloodConfig.AUTO_FEED_ENABLED::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_interval"),
+                        BloodConfig.AUTO_FEED_INTERVAL.get(), 200, 6000)
+                .setDefaultValue(300)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_interval.tooltip"))
+                .setSaveConsumer(BloodConfig.AUTO_FEED_INTERVAL::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_range"),
+                        BloodConfig.AUTO_FEED_RANGE.get(), 8, 32)
+                .setDefaultValue(16)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_range.tooltip"))
+                .setSaveConsumer(BloodConfig.AUTO_FEED_RANGE::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount"),
+                        BloodConfig.AUTO_FEED_EXTRACT_AMOUNT.get(), 1, 10)
+                .setDefaultValue(8)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.auto_feed_extract_amount.tooltip"))
+                .setSaveConsumer(BloodConfig.AUTO_FEED_EXTRACT_AMOUNT::set)
+                .build());
+
+        category.addEntry(entryBuilder.startBooleanToggle(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_damage_enabled"),
+                        BloodConfig.GARLIC_DAMAGE_ENABLED.get())
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_damage_enabled.tooltip"))
+                .setSaveConsumer(BloodConfig.GARLIC_DAMAGE_ENABLED::set)
+                .build());
+
+        category.addEntry(entryBuilder.startDoubleField(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_hp_damage"),
+                        BloodConfig.GARLIC_HP_DAMAGE.get())
+                .setDefaultValue(1.0)
+                .setMin(0.0).setMax(20.0)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_hp_damage.tooltip"))
+                .setSaveConsumer(BloodConfig.GARLIC_HP_DAMAGE::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_hp_interval"),
+                        BloodConfig.GARLIC_HP_INTERVAL.get(), 1, 1200)
+                .setDefaultValue(50)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_hp_interval.tooltip"))
+                .setSaveConsumer(BloodConfig.GARLIC_HP_INTERVAL::set)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(
+                        Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval"),
+                        BloodConfig.GARLIC_BLOOD_DECAY_INTERVAL.get(), 1, 1200)
+                .setDefaultValue(200)
+                .setTooltip(Component.translatable("config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval.tooltip"))
+                .setSaveConsumer(BloodConfig.GARLIC_BLOOD_DECAY_INTERVAL::set)
                 .build());
     }
 
