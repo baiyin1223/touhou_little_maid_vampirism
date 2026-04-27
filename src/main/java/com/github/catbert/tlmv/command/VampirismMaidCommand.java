@@ -78,10 +78,6 @@ public class VampirismMaidCommand {
             cap.setVampire(false);
             cap.setVampireLevel(0);
             cap.setHadSanguinare(false);
-            if (cap.getOriginalName() != null) {
-                target.setCustomName(Component.literal(cap.getOriginalName()));
-                cap.setOriginalName(null);
-            }
             source.sendSuccess(() -> Component.literal("已将女仆恢复为普通状态"), true);
         }
 

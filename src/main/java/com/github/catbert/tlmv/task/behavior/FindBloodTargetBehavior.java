@@ -45,6 +45,10 @@ public class FindBloodTargetBehavior extends Behavior<EntityMaid> {
             return false;
         }
 
+        if (maid.isMaidInSittingPose()) {
+            return false;
+        }
+
         if (!hasAvailableContainer(maid)) {
             long currentTime = level.getGameTime();
             String langKey = "chat_bubble.touhou_little_maid_vampirism.no_container";
@@ -104,6 +108,11 @@ public class FindBloodTargetBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected void tick(ServerLevel level, EntityMaid maid, long gameTime) {
+        if (maid.isMaidInSittingPose()) {
+            maid.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+            return;
+        }
+
         // 验证当前目标
         Optional<LivingEntity> currentTarget = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (currentTarget.isPresent()) {

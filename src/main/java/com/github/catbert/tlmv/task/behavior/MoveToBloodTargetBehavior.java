@@ -19,6 +19,9 @@ public class MoveToBloodTargetBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, EntityMaid maid) {
+        if (maid.isMaidInSittingPose()) {
+            return false;
+        }
         Optional<LivingEntity> targetOpt = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         return targetOpt.isPresent() && isValidTarget(maid, targetOpt.get());
     }
@@ -50,6 +53,9 @@ public class MoveToBloodTargetBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected boolean canStillUse(ServerLevel level, EntityMaid maid, long gameTime) {
+        if (maid.isMaidInSittingPose()) {
+            return false;
+        }
         Optional<LivingEntity> targetOpt = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (targetOpt.isEmpty()) {
             return false;

@@ -6,22 +6,27 @@ import com.github.catbert.tlmv.capability.VampireMaidCapability;
 import com.github.catbert.tlmv.config.subconfig.BloodConfig;
 import com.github.catbert.tlmv.level.VampireLevelManager;
 import com.github.catbert.tlmv.meal.VampireMaidFoodFilter;
+import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
+import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid = TLMVMain.MOD_ID)
@@ -36,26 +41,6 @@ public class VampireMaidTickHandler {
 
         ModCapabilities.getVampireMaid(living).ifPresent(cap -> {
             cap.tick(living);
-
-            if (cap.isVampire()) {
-                // 如果还没保存原始名称，保存它
-                if (cap.getOriginalName() == null) {
-                    Component currentName = living.getCustomName();
-                    if (currentName != null) {
-                        cap.setOriginalName(currentName.getString());
-                    } else {
-                        cap.setOriginalName(living.getName().getString());
-                    }
-                }
-
-                // 更新显示名称（只在名称不匹配时才设置，避免每 tick 重复调用）
-                String prefix = VampireMaidCapability.getVampireDisplayPrefix(cap.getVampireLevel());
-                String expectedName = prefix + cap.getOriginalName();
-                Component currentCustomName = living.getCustomName();
-                if (currentCustomName == null || !currentCustomName.getString().equals(expectedName)) {
-                    living.setCustomName(Component.literal(expectedName));
-                }
-            }
 
             if (cap.isVampire() && living instanceof PathfinderMob mob) {
                 // 每30秒刷新等级buff，确保永久生效（应对死亡重生等情况）
@@ -80,8 +65,32 @@ public class VampireMaidTickHandler {
                         }
                     });
                 }
+
+                // 每5秒同步吸血鬼状态到客户端
+                if (mob.tickCount % 100 == 0) {
+                    TLMVNetwork.INSTANCE.send(
+                            PacketDistributor.TRACKING_ENTITY.with(() -> mob),
+                            new SyncVampireMaidPacket(mob.getId(), cap.isVampire(), cap.getVampireLevel())
+                    );
+                }
             }
         });
+    }
+
+    @SubscribeEvent
+    public static void onStartTracking(PlayerEvent.StartTracking event) {
+        if (event.getEntity().level().isClientSide()) {
+            return;
+        }
+        Entity target = event.getTarget();
+        if (target instanceof LivingEntity living) {
+            ModCapabilities.getVampireMaid(living).ifPresent(cap -> {
+                TLMVNetwork.INSTANCE.send(
+                        PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()),
+                        new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel())
+                );
+            });
+        }
     }
 
     private static void triggerMaidFeeding(PathfinderMob mob) {

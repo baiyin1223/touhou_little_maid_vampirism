@@ -51,6 +51,9 @@ public class ExtractBloodBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, EntityMaid maid) {
+        if (maid.isMaidInSittingPose()) {
+            return false;
+        }
         Optional<LivingEntity> targetOpt = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (targetOpt.isEmpty()) {
             return false;
@@ -97,6 +100,9 @@ public class ExtractBloodBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected boolean canStillUse(ServerLevel level, EntityMaid maid, long gameTime) {
+        if (maid.isMaidInSittingPose()) {
+            return false;
+        }
         Optional<LivingEntity> targetOpt = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
         if (targetOpt.isEmpty()) {
             return false;

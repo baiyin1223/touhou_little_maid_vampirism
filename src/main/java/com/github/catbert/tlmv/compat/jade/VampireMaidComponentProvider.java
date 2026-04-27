@@ -43,7 +43,7 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
             int blood = data.getInt("bloodLevel");
             int maxBlood = data.getInt("maxBlood");
             tooltip.add(Component.translatable("tooltip.touhou_little_maid_vampirism.blood_level", blood, maxBlood));
-            tooltip.add(Component.translatable("tooltip.touhou_little_maid_vampirism.vampire_level", level));
+            tooltip.add(getVampireRankComponent(level));
         }
     }
 
@@ -81,5 +81,9 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
     @Override
     public ResourceLocation getUid() {
         return ID;
+    }
+
+    private static Component getVampireRankComponent(int level) {
+        return Component.translatable("tooltip.touhou_little_maid_vampirism.vampire_rank." + level);
     }
 }

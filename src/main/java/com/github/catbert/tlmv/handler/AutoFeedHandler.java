@@ -51,6 +51,15 @@ public class AutoFeedHandler {
             if (!cap.isVampire()) return;
             if (!BloodConfig.AUTO_FEED_ENABLED.get()) return;
 
+            // 女仆坐下时停止自动觅血
+            if (maid.isMaidInSittingPose()) {
+                if (cap.getAutoFeedState() != 0) {
+                    cap.resetAutoFeedState();
+                    maid.getNavigation().stop();
+                }
+                return;
+            }
+
             // 如果状态不是 EXTRACTING 但音效正在播放，立即停止
             if (cap.getAutoFeedState() != 2 && soundStartTime > 0) {
                 if (living.level() instanceof ServerLevel serverLevel) {

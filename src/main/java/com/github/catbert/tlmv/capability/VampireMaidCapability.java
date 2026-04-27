@@ -10,7 +10,6 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
     private boolean isVampire = false;
     private boolean hadSanguinare = false;
     private int vampireLevel = 0;
-    private String originalName = null;
 
     // Blood decay tracking fields
     private int lastKnownBlood = -1;  // -1 表示未初始化
@@ -46,14 +45,6 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
 
     public void setVampireLevel(int level) {
         this.vampireLevel = Math.max(0, Math.min(5, level));
-    }
-
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
     }
 
     public int getLastKnownBlood() { return lastKnownBlood; }
@@ -108,9 +99,6 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
         tag.putBoolean("isVampire", isVampire);
         tag.putBoolean("hadSanguinare", hadSanguinare);
         tag.putInt("vampireLevel", vampireLevel);
-        if (originalName != null) {
-            tag.putString("originalName", originalName);
-        }
         tag.putInt("lastKnownBlood", lastKnownBlood);
         tag.putInt("bloodDecayTimer", bloodDecayTimer);
         tag.putInt("slowDecayTimer", slowDecayTimer);
@@ -156,9 +144,6 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
             this.autoFeedTargetUUID = tag.getUUID("autoFeedTargetUUID");
         } else {
             this.autoFeedTargetUUID = null;
-        }
-        if (tag.contains("originalName")) {
-            this.originalName = tag.getString("originalName");
         }
     }
 }

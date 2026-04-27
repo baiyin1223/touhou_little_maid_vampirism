@@ -3,6 +3,7 @@ package com.github.catbert.tlmv;
 import com.github.catbert.tlmv.command.VampirismMaidCommand;
 import com.github.catbert.tlmv.compat.tlm.TLMCompat;
 import com.github.catbert.tlmv.config.TLMVConfig;
+import com.github.catbert.tlmv.network.TLMVNetwork;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,6 +34,7 @@ public class TLMVMain {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("TouhouLittleMaid Vampirism initializing...");
+        TLMVNetwork.register();
         TLMCompat.init();
     }
 
