@@ -1,0 +1,50 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# IDE - Eclipse
+.settings/
+.classpath
+.project
+eclipse/
+
+# Minecraft run directories
+run/
+run-data/
+
+# Logs
+logs/
+*.log
+
+# Compiled / packaged
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Forge data generation output
+src/generated/
+
+# Qoder IDE cache
+.qoder/
+
+# IDE - Trae / VS Code
+.trae/
+.vscode/
+
+# Project notes
+text.txt
+
+# Generated manifest (Forge generates this during build)
+MANIFEST.MF
+
+# OS files
+.DS_Store
+Thumbs.db

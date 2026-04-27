@@ -1,0 +1,18 @@
+{
+    "sortnum": 0,
+    "name": "Transformation & Ascension",
+    "icon": "vampirism:vampire_fang",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Becoming a Vampire Maid",
+            "text": "There are two ways to transform a maid into a vampire:$(br2)$(li)$(bold)Monster Attack:$() Vampire monsters from the Vampirism mod can infect maids by attacking them. The maid will contract Sanguinare Vampiris, and after the infection period, she will transform into a vampire maid.$(li)$(bold)Vampire Fang:$() Use a vampire fang item on a maid to directly infect her."
+        },
+        {
+            "type": "text",
+            "title": "Vampire Levels",
+            "text": "Vampire maids have a level system from 1 to 5, each granting unique titles and attribute bonuses:$(br2)$(li)Lv.1 - Blood Servant$(li)Lv.2 - Blood Attendant$(li)Lv.3 - Dark Blood Attendant$(li)Lv.4 - Rose Blood Attendant$(li)Lv.5 - Eternal Night Bloodqueen$(br2)Higher levels provide better attribute bonuses and slower blood decay rates.$(br2)$(italic)Note: The level advancement system is under development.$() Currently, levels can be set via commands."
+        }
+    ]
+}
