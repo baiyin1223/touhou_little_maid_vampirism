@@ -29,10 +29,10 @@ This mod bridges **TouhouLittleMaid** and **Vampirism**, bringing a fully integr
 
 | Dependency | Version | Required |
 |---|---|---|
-| Minecraft | 1.20.1 | Yes |
-| Forge | 47.2.0+ | Yes |
+| Minecraft | 1.21.1 | Yes |
+| NeoForge | --- | Yes |
 | TouhouLittleMaid | 1.3.0+ | Yes |
-| Vampirism | 1.20.1-1.10.13+ | Yes |
+| Vampirism | --- | Yes |
 | Jade | any | Optional |
 | Patchouli | any | Optional |
 | Cloth Config | any | Optional |
