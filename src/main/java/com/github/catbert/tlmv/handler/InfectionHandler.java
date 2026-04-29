@@ -151,10 +151,23 @@ public class InfectionHandler {
         // causing the effect to be removed via removeEffect() instead of expiring naturally.
         // This means MobEffectEvent.Expired never fires — only MobEffectEvent.Remove does.
         // So we must also handle conversion here.
+        //
+        // However, we need to distinguish "natural expiry" (applyEffectTick returns false at
+        // duration ~1-2) from "external removal" (milk bucket, /effect clear, etc.).
+        // When Vampirism internally removes the effect, the remaining duration is very low (~1-2).
+        // When externally cleared, the duration is typically much higher.
+        // We use a threshold of 5 ticks as a safety margin.
         VampireMaidCapability removedCap = entity.getData(ModAttachments.VAMPIRE_MAID.get());
         if (removedCap.hasHadSanguinare() && !removedCap.isVampire()) {
-            removedCap.setVampire(true);
-            removedCap.setVampireLevel(1);
+            int remainingDuration = effectInstance != null ? effectInstance.getDuration() : 0;
+            if (remainingDuration <= 5) {
+                // Duration is very low — this is a natural expiry triggered by Vampirism's applyEffectTick
+                removedCap.setVampire(true);
+                removedCap.setVampireLevel(1);
+            } else {
+                // Duration is still high — external removal (milk/command), do NOT convert
+                TLMVMain.LOGGER.debug("[TLMV] Sanguinare removed externally (duration={}), skipping conversion", remainingDuration);
+            }
         }
         removedCap.setHadSanguinare(false);
     }
