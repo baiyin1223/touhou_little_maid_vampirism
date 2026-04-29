@@ -2,6 +2,7 @@ package com.github.catbert.tlmv.config;
 
 import com.github.catbert.tlmv.config.subconfig.BloodConfig;
 import com.github.catbert.tlmv.config.subconfig.InfectionConfig;
+import com.github.catbert.tlmv.config.subconfig.LevelingConfig;
 import com.github.catbert.tlmv.config.subconfig.SunDamageConfig;
 import com.github.catbert.tlmv.config.subconfig.TaskConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -15,6 +16,7 @@ public final class GeneralConfig {
         SunDamageConfig.init(builder);
         BloodConfig.init(builder);
         TaskConfig.init(builder);
+        LevelingConfig.init(builder);
         CONFIG = builder.build();
         return CONFIG;
     }

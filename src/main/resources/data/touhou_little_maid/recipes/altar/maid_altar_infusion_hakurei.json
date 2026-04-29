@@ -1,0 +1,21 @@
+{
+    "type": "touhou_little_maid:altar_crafting",
+    "output": {
+        "type": "minecraft:item",
+        "nbt": {
+            "Item": {
+                "id": "touhou_little_maid_vampirism:maid_altar_infusion",
+                "Count": 1
+            }
+        }
+    },
+    "power": 0.2,
+    "ingredients": [
+        {
+            "item": "vampirism:altar_infusion"
+        },
+        {
+            "item": "touhou_little_maid:hakurei_gohei"
+        }
+    ]
+}

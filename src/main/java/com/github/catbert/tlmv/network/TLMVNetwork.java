@@ -21,5 +21,9 @@ public class TLMVNetwork {
                 SyncVampireMaidPacket::encode,
                 SyncVampireMaidPacket::decode,
                 SyncVampireMaidPacket::handle);
+        INSTANCE.registerMessage(packetId++, StartRitualPacket.class,
+                StartRitualPacket::encode,
+                StartRitualPacket::new,
+                StartRitualPacket::handle);
     }
 }

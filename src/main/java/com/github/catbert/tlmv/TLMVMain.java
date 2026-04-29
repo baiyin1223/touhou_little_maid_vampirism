@@ -3,8 +3,17 @@ package com.github.catbert.tlmv;
 import com.github.catbert.tlmv.command.VampirismMaidCommand;
 import com.github.catbert.tlmv.compat.tlm.TLMCompat;
 import com.github.catbert.tlmv.config.TLMVConfig;
+import com.github.catbert.tlmv.init.ModBlockEntities;
+import com.github.catbert.tlmv.init.ModBlockItems;
+import com.github.catbert.tlmv.init.ModBlocks;
+import com.github.catbert.tlmv.init.ModMenuTypes;
 import com.github.catbert.tlmv.network.TLMVNetwork;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,6 +34,13 @@ public class TLMVMain {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
 
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModBlockItems.ITEMS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModMenuTypes.MENUS.register(modEventBus);
+
+        modEventBus.addListener(TLMVMain::onBuildCreativeTab);
+
         TLMVConfig.register();
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -36,6 +52,13 @@ public class TLMVMain {
         LOGGER.info("TouhouLittleMaid Vampirism initializing...");
         TLMVNetwork.register();
         TLMCompat.init();
+    }
+
+    @SubscribeEvent
+    public static void onBuildCreativeTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation("touhou_little_maid", "main"))) {
+            event.accept(ModBlockItems.MAID_ALTAR_INFUSION.get());
+        }
     }
 
     @SubscribeEvent

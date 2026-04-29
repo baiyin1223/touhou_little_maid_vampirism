@@ -95,5 +95,15 @@
     "config.touhou_little_maid_vampirism.blood.garlic_hp_interval": "Garlic HP Interval",
     "config.touhou_little_maid_vampirism.blood.garlic_hp_interval.tooltip": "Interval in ticks for garlic HP damage (50 = 2.5 seconds)",
     "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval": "Garlic Blood Decay Interval",
-    "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval.tooltip": "Interval in ticks for extra blood decay from garlic (200 = 10 seconds)"
+    "config.touhou_little_maid_vampirism.blood.garlic_blood_decay_interval.tooltip": "Interval in ticks for extra blood decay from garlic (200 = 10 seconds)",
+    "block.touhou_little_maid_vampirism.maid_altar_infusion": "Maid Leveling Altar",
+    "container.touhou_little_maid_vampirism.maid_altar": "Maid Leveling Altar",
+    "gui.touhou_little_maid_vampirism.start_ritual": "Start Ritual",
+    "gui.touhou_little_maid_vampirism.ritual.no_maid": "§cNo vampire maid found nearby",
+    "gui.touhou_little_maid_vampirism.ritual.wrong_level": "§cMaid cannot be leveled up further",
+    "gui.touhou_little_maid_vampirism.ritual.night_only": "§cRitual can only be performed at night",
+    "gui.touhou_little_maid_vampirism.ritual.structure_wrong": "§cInsufficient altar structure points",
+    "gui.touhou_little_maid_vampirism.ritual.items_missing": "§cRequired materials are missing",
+    "gui.touhou_little_maid_vampirism.ritual.is_running": "§cRitual is already in progress",
+    "gui.touhou_little_maid_vampirism.ritual.success": "§aRitual has begun!"
 }
