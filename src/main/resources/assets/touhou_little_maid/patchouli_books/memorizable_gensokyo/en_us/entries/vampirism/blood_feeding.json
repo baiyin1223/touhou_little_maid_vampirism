@@ -1,0 +1,23 @@
+{
+    "sortnum": 2,
+    "name": "Blood & Feeding",
+    "icon": "vampirism:blood_bottle",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Blood System",
+            "text": "Vampire maids have a blood level (up to 20 points) that gradually decays over time:$(br2)$(li)$(bold)Above 6:$() Every 10 seconds, 1/6 chance to lose 1 point$(li)$(bold)At or below 6 (Level < 3):$() Loses 1 point every 5 minutes$(li)$(bold)At or below 6 (Level >= 3):$() Loses 1 point every 10 minutes$(li)$(bold)Level 5:$() Blood stops decaying below 6$(br2)When blood reaches 0, the maid takes damage every 3 seconds until she dies or is fed."
+        },
+        {
+            "type": "text",
+            "title": "Feeding Mechanics",
+            "text": "Vampire maids only consume blood-related food items. Regular food will be rejected.$(br2)$(bold)Accepted Food:$()$(br)$(li)Blood Bottles (from Vampirism)$(li)Hearts and blood items$(li)Any item tagged with Vampirism tags$(br2)The maid will automatically consume blood food from her inventory when hungry. Blood bottles restore up to 3 blood per use.$(br2)If no blood food is available, the maid will automatically hunt nearby creatures to feed directly."
+        },
+        {
+            "type": "text",
+            "title": "Vampire Kinship",
+            "text": "Vampire maids are recognized as allies by the vampire faction. They will not be attacked or bitten by vampire creatures.$(br2)This means vampire maids can safely operate in vampire territories without fear of hostility from their own kind.$(br2)$(bold)Note:$() This protection only applies to vampire maids. Regular maids will still be attacked by vampire creatures."
+        }
+    ]
+}

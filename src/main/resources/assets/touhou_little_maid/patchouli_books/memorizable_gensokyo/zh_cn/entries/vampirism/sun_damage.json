@@ -1,0 +1,13 @@
+{
+    "sortnum": 1,
+    "name": "阳光伤害机制",
+    "icon": "minecraft:sunflower",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "text",
+            "title": "阳光易伤",
+            "text": "吸血鬼女仆和吸血鬼模组中的吸血鬼一样，容易受到阳光伤害。$(br2)当暴露在直射阳光下（头顶无遮挡、白天、非雨天）时，吸血鬼女仆会受到周期性伤害。$(br2)伤害量和伤害频率可以在模组设置中进行配置。$(br2)$(bold)防晒保护：$()如果女仆身上有吸血鬼模组的防晒buff，她将免疫阳光伤害。此功能可在配置中开关。"
+        }
+    ]
+}

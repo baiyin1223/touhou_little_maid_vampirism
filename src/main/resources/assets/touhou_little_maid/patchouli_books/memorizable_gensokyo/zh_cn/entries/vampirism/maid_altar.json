@@ -1,0 +1,34 @@
+{
+    "sortnum": 0,
+    "name": "女仆晋升祭坛",
+    "icon": "touhou_little_maid_vampirism:maid_altar_infusion",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "touhou_little_maid_vampirism:maid_altar_infusion",
+            "title": "女仆晋升祭坛",
+            "text": "女仆晋升祭坛是吸血鬼女仆提升等级所必需的特殊装置。$(br2)祭坛的多方块结构与吸血鬼玩家的晋升祭坛$(bold)完全相同$()，只需将中心的$(bold)vampirism:altar_infusion$()替换为$(bold)女仆晋升祭坛$()方块即可。"
+        },
+        {
+            "type": "text",
+            "title": "各等级材料需求",
+            "text": "以下是吸血鬼女仆各等级晋升所需的材料与结构点数要求：$(br2)$(bold)1 → 2 级：$()$(li)纯血液（等级2）×10$(li)人类心脏 ×10$(li)吸血鬼之书 ×1$(li)结构点数 ≥ 18$(br2)$(bold)2 → 3 级：$()$(li)纯血液（等级2）×15$(li)人类心脏 ×20$(li)吸血鬼之书 ×1$(li)结构点数 ≥ 26$(br2)$(bold)3 → 4 级：$()$(li)纯血液（等级3）×20$(li)人类心脏 ×30$(li)吸血鬼之书 ×1$(li)结构点数 ≥ 35$(br2)$(bold)4 → 5 级：$()$(li)纯血液（等级4）×25$(li)人类心脏 ×40$(li)吸血鬼之书 ×1$(li)结构点数 ≥ 44"
+        },
+        {
+            "type": "text",
+            "title": "仪式流程",
+            "text": "晋升仪式的执行步骤如下：$(br2)$(li)将所需材料放入晋升祭坛的槽位中。$(li)确保目标$(bold)吸血鬼女仆$()位于祭坛周围$(bold)3格$()范围内。$(li)点击祭坛界面中的$(bold)开始晋升$()按钮。$(br2)$(italic)注意：晋升仪式只能在$(bold)夜间$()进行。$()如果当前是白天，仪式将无法启动。$(br2)仪式开始后，女仆将吸收祭坛中的能量并完成等级提升，同时消耗所有放置的材料。"
+        },
+        {
+            "type": "altar_recipe",
+            "recipe_id": "touhou_little_maid:altar_recipe/maid_altar_infusion_hakurei",
+            "title": "祭坛合成配方（博丽）"
+        },
+        {
+            "type": "altar_recipe",
+            "recipe_id": "touhou_little_maid:altar_recipe/maid_altar_infusion_sanae",
+            "title": "祭坛合成配方（早苗）"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "sortnum": 1,
+    "name": "Sun Damage",
+    "icon": "minecraft:sunflower",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Sunlight Vulnerability",
+            "text": "Vampire maids are vulnerable to sunlight, just like vampires from the Vampirism mod.$(br2)When exposed to direct sunlight (no blocks above, during daytime, not raining), vampire maids will take periodic damage.$(br2)The damage amount and frequency can be configured in the mod settings.$(br2)$(bold)Sunscreen Protection:$() If the Vampirism sunscreen buff is active on the maid, she will be immune to sun damage. This can be toggled in the configuration."
+        }
+    ]
+}

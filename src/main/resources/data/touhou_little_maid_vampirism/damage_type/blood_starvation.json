@@ -1,0 +1,7 @@
+{
+    "message_id": "touhou_little_maid_vampirism.blood_starvation",
+    "scaling": "never",
+    "exhaustion": 0.0,
+    "effects": "hurt",
+    "death_message_type": "default"
+}

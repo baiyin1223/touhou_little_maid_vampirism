@@ -1,0 +1,18 @@
+{
+    "sortnum": 3,
+    "name": "Blood Collection Task",
+    "icon": "minecraft:glass_bottle",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Collecting Blood",
+            "text": "Vampire maids can be assigned the $(bold)Collect Blood$() task to actively search for nearby creatures and extract their blood into bottles.$(br2)$(bold)Requirements:$()$(br)$(li)The maid must be a vampire$(li)Glass bottles or unfilled blood bottles in the maid's inventory$(br2)$(bold)How it works:$()$(br)The maid will search for creatures within range, approach them, and extract blood to fill bottles. Full blood bottles (9/9) can be collected by the player for later use."
+        },
+        {
+            "type": "text",
+            "title": "Configuration",
+            "text": "The following can be configured:$(br2)$(li)$(bold)Search Range:$() How far the maid searches for targets (default: 16 blocks)$(li)$(bold)Extract Amount:$() Maximum blood extracted per action (default: 6)$(li)$(bold)Cooldown:$() Time between extraction actions (default: 1.5 seconds)$(br2)All settings can be adjusted in the mod configuration menu."
+        }
+    ]
+}

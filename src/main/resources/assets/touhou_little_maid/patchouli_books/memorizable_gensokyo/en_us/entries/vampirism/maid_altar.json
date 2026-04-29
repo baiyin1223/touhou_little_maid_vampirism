@@ -1,0 +1,34 @@
+{
+    "sortnum": 0,
+    "name": "Maid Leveling Altar",
+    "icon": "touhou_little_maid_vampirism:maid_altar_infusion",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "touhou_little_maid_vampirism:maid_altar_infusion",
+            "title": "Maid Leveling Altar",
+            "text": "The Maid Leveling Altar is a special device required for vampire maids to advance their level.$(br2)The multi-block structure is $(bold)identical$() to the player vampire leveling altar. Simply replace the center $(bold)vampirism:altar_infusion$() with the $(bold)Maid Leveling Altar$() block."
+        },
+        {
+            "type": "text",
+            "title": "Material Requirements",
+            "text": "The following materials and structure point requirements are needed for each level advancement:$(br2)$(bold)Level 1 → 2:$()$(li)Pure Blood (Level 2) ×10$(li)Human Heart ×10$(li)Vampire Book ×1$(li)Structure Points ≥ 18$(br2)$(bold)Level 2 → 3:$()$(li)Pure Blood (Level 2) ×15$(li)Human Heart ×20$(li)Vampire Book ×1$(li)Structure Points ≥ 26$(br2)$(bold)Level 3 → 4:$()$(li)Pure Blood (Level 3) ×20$(li)Human Heart ×30$(li)Vampire Book ×1$(li)Structure Points ≥ 35$(br2)$(bold)Level 4 → 5:$()$(li)Pure Blood (Level 4) ×25$(li)Human Heart ×40$(li)Vampire Book ×1$(li)Structure Points ≥ 44"
+        },
+        {
+            "type": "text",
+            "title": "Ritual Procedure",
+            "text": "Follow these steps to perform the leveling ritual:$(br2)$(li)Place all required materials into the altar slots.$(li)Ensure the target $(bold)vampire maid$() is within $(bold)3 blocks$() of the altar.$(li)Click the $(bold)Start Ritual$() button in the altar interface.$(br2)$(italic)Note: The ritual can only be performed at $(bold)night$().$() If it is daytime, the ritual will not start.$(br2)Once the ritual begins, the maid will absorb energy from the altar and complete her level advancement, consuming all placed materials."
+        },
+        {
+            "type": "altar_recipe",
+            "recipe_id": "touhou_little_maid:altar_recipe/maid_altar_infusion_hakurei",
+            "title": "Altar Recipe (Hakurei)"
+        },
+        {
+            "type": "altar_recipe",
+            "recipe_id": "touhou_little_maid:altar_recipe/maid_altar_infusion_sanae",
+            "title": "Altar Recipe (Sanae)"
+        }
+    ]
+}
