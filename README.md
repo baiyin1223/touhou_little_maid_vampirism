@@ -19,7 +19,7 @@ This mod bridges **TouhouLittleMaid** and **Vampirism**, bringing a fully integr
 
 ☀️ **Fear the Sun** — Daylight is deadly. Vampire maids take damage under direct sunlight, forcing you to plan around the day-night cycle — unless they've grown powerful enough to resist it.
 
-📈 **Maid Level System** *(In Development)* — Vampire maids can progress through levels 1–5, growing stronger and unlocking sun resistance as they advance. Currently, leveling up is only available via commands.
+📈 **Maid Level System** — Vampire maids progress through levels 1–5, growing stronger and unlocking sun resistance as they advance. Build the **Maid Altar of Infusion** — a dark ritual structure inspired by Vampirism's own altar — to channel your maid's ascension through a full ceremonial experience with crimson beams, swirling blood particles, and an explosive finale.
 
 🔧 **Deeply Configurable** — Nearly every mechanic is tweakable. Supports **Cloth Config** for an in-game GUI, **Jade** for HUD status display, and **Patchouli** for a built-in guidebook.
 
