@@ -1,0 +1,19 @@
+{
+    "sortnum": 1,
+    "name": "Altar of Cleansing",
+    "icon": "vampirism:altar_cleansing",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "vampirism:altar_cleansing",
+            "title": "Altar of Cleansing",
+            "text": "The $(item)Altar of Cleansing$() is a block from the Vampirism mod used to remove vampire levels.$(br2)Right-click the altar to open the cleansing interface, where you can choose to clear your own vampire level (vanilla feature) or clear the level of your nearby $(bold)vampire maids$()."
+        },
+        {
+            "type": "text",
+            "title": "Clearing Maid Level",
+            "text": "Click the $(bold)Clear Maid Level$() button in the cleansing interface to remove the vampire level from your vampire maids within $(bold)5 blocks$() of the altar.$(br2)$(li)Maids must be within $(bold)5 blocks$() of the altar$(li)After clearing, the maid will become a normal maid$(li)If infected and transformed again later, the level will start from $(bold)Level 1$()$(br2)$(bold)Requirement:$() Only vampire players can understand vampire life, so you must become a vampire first to use the Altar of Cleansing to clear a maid's vampire level.$(br2)$(bold)Maid Death:$() After clearing a maid's vampire level, the maid will die once. You will need to revive her using a film.$(br2)$(italic)Note: This action is irreversible. Use with caution.$()"
+        }
+    ]
+}

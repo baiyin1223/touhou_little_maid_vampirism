@@ -1,0 +1,19 @@
+{
+    "sortnum": 1,
+    "name": "净化祭坛",
+    "icon": "vampirism:altar_cleansing",
+    "category": "touhou_little_maid:vampirism",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "item": "vampirism:altar_cleansing",
+            "title": "净化祭坛",
+            "text": "$(item)净化祭坛$()是 Vampirism 模组提供的方块，用于清除吸血鬼等级。$(br2)右键点击净化祭坛可以打开净化界面，在这里你可以选择清除自己的吸血鬼等级（原版功能），或者清除附近你的$(bold)吸血鬼女仆$()的等级。"
+        },
+        {
+            "type": "text",
+            "title": "清除女仆等级",
+            "text": "在净化界面中点击$(bold)清除女仆等级$()按钮，可以清除祭坛$(bold)5格$()范围内属于你的吸血鬼女仆的吸血鬼等级。$(br2)$(li)女仆需要在祭坛周围$(bold)5格$()范围内$(li)清除后女仆将变为普通女仆$(li)如果之后重新感染转变，等级将从$(bold)1级$()开始$(br2)$(bold)使用条件：$()只有吸血鬼玩家才能够理解吸血鬼生命，因此你必须先成为吸血鬼才能使用净化祭坛来清除女仆的吸血鬼等级。$(br2)$(bold)女仆死亡：$()清除女仆吸血鬼等级后，女仆会死亡一次，你需要使用胶片来复活她。$(br2)$(italic)注意：此操作不可逆，请谨慎使用。$()"
+        }
+    ]
+}

@@ -7,14 +7,11 @@ import com.github.catbert.tlmv.meal.VampireMaidFoodFilter;
 import com.github.catbert.tlmv.util.VampirismHelper;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
@@ -25,7 +22,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 @EventBusSubscriber(modid = TLMVMain.MOD_ID)
 public class MaidFoodHandler {
 
-    private static final double NOTIFY_RADIUS_SQR = 100;
 
     @SubscribeEvent
     public static void onItemUseStart(LivingEntityUseItemEvent.Start event) {
@@ -45,7 +41,6 @@ public class MaidFoodHandler {
                 event.setCanceled(true);
                 TLMVMain.LOGGER.info("[MaidFoodHandler] Canceling non-blood food for vampire maid: {}", item.getItem());
                 entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0, false, false));
-                notifyNearbyPlayers(entity);
             }
         }
     }
@@ -161,13 +156,5 @@ public class MaidFoodHandler {
 
         return 4;
     }
-
-    private static void notifyNearbyPlayers(LivingEntity entity) {
-        for (Player player : entity.level().players()) {
-            if (player instanceof ServerPlayer && player.distanceToSqr(entity) < NOTIFY_RADIUS_SQR) {
-                player.sendSystemMessage(
-                        Component.translatable("message.touhou_little_maid_vampirism.vampire_maid_reject_food"));
-            }
-        }
-    }
 }
+

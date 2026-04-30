@@ -133,6 +133,8 @@ public class VampireMaidTickHandler {
                         return;
                     }
                     // 非血瓶的血液食物走正常 startUsingItem 路径
+                    ItemStack mainHandItem = maid.getMainHandItem().copy();
+                    maid.memoryHandItemStack(mainHandItem);
                     maid.setItemInHand(InteractionHand.MAIN_HAND, extracted);
                     maid.startUsingItem(InteractionHand.MAIN_HAND);
                     TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: {}", extracted);

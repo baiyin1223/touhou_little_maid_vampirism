@@ -105,5 +105,12 @@
     "gui.touhou_little_maid_vampirism.ritual.structure_wrong": "§cInsufficient altar structure points",
     "gui.touhou_little_maid_vampirism.ritual.items_missing": "§cRequired materials are missing",
     "gui.touhou_little_maid_vampirism.ritual.is_running": "§cRitual is already in progress",
-    "gui.touhou_little_maid_vampirism.ritual.success": "§aRitual has begun!"
+    "gui.touhou_little_maid_vampirism.ritual.success": "§aRitual has begun!",
+    "gui.touhou_little_maid_vampirism.altar_cleansing.title": "Altar of Cleansing",
+    "gui.touhou_little_maid_vampirism.altar_cleansing.desc": "Are you sure you want to lose your vampire level?",
+    "gui.touhou_little_maid_vampirism.altar_cleansing.revert_player": "Clear Player Level",
+    "gui.touhou_little_maid_vampirism.clear_maid_level": "Clear Maid Level",
+    "gui.touhou_little_maid_vampirism.clear_maid_level.desc": "Clear vampire level of your nearby vampire maids",
+    "message.touhou_little_maid_vampirism.clear_maid_success": "Cleared vampire level from %d maid(s)",
+    "message.touhou_little_maid_vampirism.clear_maid_not_found": "No vampire maids belonging to you found nearby"
 }

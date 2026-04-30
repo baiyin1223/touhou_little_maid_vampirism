@@ -14,6 +14,11 @@ public class TLMVNetwork {
                 StartRitualPacket.STREAM_CODEC,
                 StartRitualPacket::handle
         );
+        registrar.playToServer(
+                ClearMaidVampirePacket.TYPE,
+                ClearMaidVampirePacket.STREAM_CODEC,
+                ClearMaidVampirePacket::handle
+        );
 
         // client-bound
         registrar.playToClient(
