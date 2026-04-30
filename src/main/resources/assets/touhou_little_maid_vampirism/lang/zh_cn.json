@@ -105,5 +105,12 @@
     "gui.touhou_little_maid_vampirism.ritual.structure_wrong": "§c祭坛结构点数不足",
     "gui.touhou_little_maid_vampirism.ritual.items_missing": "§c所需材料不足",
     "gui.touhou_little_maid_vampirism.ritual.is_running": "§c仪式正在进行中",
-    "gui.touhou_little_maid_vampirism.ritual.success": "§a晋升仪式已开始！"
+    "gui.touhou_little_maid_vampirism.ritual.success": "§a晋升仪式已开始！",
+    "gui.touhou_little_maid_vampirism.altar_cleansing.title": "净化祭坛",
+    "gui.touhou_little_maid_vampirism.altar_cleansing.desc": "你确定要清除你的吸血鬼等级吗？",
+    "gui.touhou_little_maid_vampirism.altar_cleansing.revert_player": "清除玩家等级",
+    "gui.touhou_little_maid_vampirism.clear_maid_level": "清除女仆等级",
+    "gui.touhou_little_maid_vampirism.clear_maid_level.desc": "清除祭坛附近你的吸血鬼女仆的等级",
+    "message.touhou_little_maid_vampirism.clear_maid_success": "已清除 %d 个女仆的吸血鬼等级",
+    "message.touhou_little_maid_vampirism.clear_maid_not_found": "附近没有找到属于你的吸血鬼女仆"
 }

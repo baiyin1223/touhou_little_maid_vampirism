@@ -130,9 +130,12 @@ public class VampireMaidTickHandler {
                         return;
                     }
                     // 非血瓶的血液食物走正常 startUsingItem 路径
+                    // 保存当前主手物品到 hideInv，进食完成后 completeUsingItem() 会自动恢复
+                    ItemStack mainHandItem = maid.getMainHandItem().copy();
                     maid.setItemInHand(InteractionHand.MAIN_HAND, extracted);
+                    maid.memoryHandItemStack(mainHandItem);
                     maid.startUsingItem(InteractionHand.MAIN_HAND);
-                    TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: {}", extracted);
+                    TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: {}, saved main hand: {}", extracted, mainHandItem);
                     return;
                 }
             }
