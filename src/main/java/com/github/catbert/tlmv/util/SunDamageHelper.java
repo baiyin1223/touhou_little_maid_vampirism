@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModList;
 import net.minecraft.core.registries.BuiltInRegistries;
+import de.teamlapen.vampirism.api.VampirismAPI;
 
 public class SunDamageHelper {
 
@@ -60,7 +61,7 @@ public class SunDamageHelper {
             return false;
         }
 
-        return level.canSeeSky(pos.above());
+        return level.canSeeSky(pos.above()) && VampirismAPI.sundamageRegistry().hasSunDamage(level, pos);
     }
 
     public static boolean hasSunscreenEffect(LivingEntity entity) {

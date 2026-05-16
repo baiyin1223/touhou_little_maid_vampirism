@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraft.core.registries.BuiltInRegistries;
+import de.teamlapen.vampirism.api.VampirismAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +85,11 @@ public class SunDamageHandler {
         }
 
         if (!level.canSeeSky(pos.above())) {
+            return false;
+        }
+
+        // 检查 Vampirism 群系/维度配置（vampire_forest 等群系免疫阳光伤害）
+        if (!VampirismAPI.sundamageRegistry().hasSunDamage(level, pos)) {
             return false;
         }
 

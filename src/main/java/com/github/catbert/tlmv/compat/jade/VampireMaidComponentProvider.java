@@ -3,6 +3,7 @@ package com.github.catbert.tlmv.compat.jade;
 import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.capability.ModAttachments;
 import com.github.catbert.tlmv.capability.VampireMaidCapability;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -52,6 +53,9 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
     @Override
     public void appendServerData(CompoundTag data, EntityAccessor accessor) {
         LivingEntity entity = (LivingEntity) accessor.getEntity();
+        if (!(entity instanceof EntityMaid)) {
+            return;
+        }
         VampireMaidCapability cap = entity.getData(ModAttachments.VAMPIRE_MAID.get());
         Holder<MobEffect> sanguinare = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath("vampirism", "sanguinare")).orElse(null);
         boolean hasSanguinare = sanguinare != null && entity.hasEffect(sanguinare);
