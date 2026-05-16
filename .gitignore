@@ -28,6 +28,7 @@ logs/
 *.class
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
+bin/
 
 # Forge data generation output
 src/generated/

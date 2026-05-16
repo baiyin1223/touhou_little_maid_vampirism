@@ -3,6 +3,7 @@ package com.github.catbert.tlmv.handler;
 import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.capability.ModCapabilities;
 import com.github.catbert.tlmv.config.subconfig.SunDamageConfig;
+import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -83,6 +84,11 @@ public class SunDamageHandler {
         }
 
         if (!level.canSeeSky(pos.above())) {
+            return false;
+        }
+
+        // 检查 Vampirism 群系/维度配置（vampire_forest 等群系免疫阳光伤害）
+        if (!VampirismAPI.sundamageRegistry().hasSunDamage(level, pos)) {
             return false;
         }
 

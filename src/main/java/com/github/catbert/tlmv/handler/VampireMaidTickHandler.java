@@ -10,27 +10,42 @@ import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
 import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
+import de.teamlapen.vampirism.blockentity.SunscreenBeaconBlockEntity;
+import de.teamlapen.vampirism.config.VampirismConfig;
+import de.teamlapen.vampirism.core.ModEffects;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Map;
+
 @Mod.EventBusSubscriber(modid = TLMVMain.MOD_ID)
 public class VampireMaidTickHandler {
+
+    // VNU (VampiresNeedUmbrellas) 可选联动：零编译依赖，通过 Registry Name 检测
+    private static final boolean VNU_LOADED = ModList.get().isLoaded("vampiresneedumbrellas");
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
@@ -55,6 +70,12 @@ public class VampireMaidTickHandler {
                     if (mob instanceof EntityMaid maid) {
                         VampireLevelManager.applyLevelAttributes(maid, cap.getVampireLevel());
                     }
+                }
+
+                // Sunscreen Beacon 检测（每 80 ticks）和 VNU 伞联动（每 tick）
+                if (mob instanceof EntityMaid maid2 && mob.level() instanceof ServerLevel serverLevel) {
+                    checkSunscreenBeacon(maid2, serverLevel);
+                    checkUmbrellaProtection(maid2, serverLevel, cap);
                 }
 
                 // 每3秒检查血值，触发进食
@@ -212,5 +233,113 @@ public class VampireMaidTickHandler {
         maid.removeEffect(MobEffects.CONFUSION);
         maid.removeEffect(MobEffects.POISON);
         maid.removeEffect(MobEffects.HUNGER);
+    }
+
+    // ========== Sunscreen Beacon 检测 ==========
+
+    /**
+     * 检测附近的 Vampirism Sunscreen Beacon，为吸血鬼女仆施加防晒效果。
+     * 逻辑与 Vampirism 的 SunscreenBeaconBlockEntity.serverTick 保持一致：
+     * 每 80 ticks 检查一次，XZ 平面距离，Y 轴无限制。
+     */
+    private static void checkSunscreenBeacon(EntityMaid maid, ServerLevel level) {
+        if (level.getGameTime() % 80L != 0L) return;
+
+        int dist = VampirismConfig.SERVER.sunscreenBeaconDistance.get();
+        int distSq = dist * dist;
+
+        BlockPos maidPosXZ = new BlockPos((int) maid.getX(), 0, (int) maid.getZ());
+
+        int chunkRadius = (dist >> 4) + 1;
+        int maidChunkX = maid.blockPosition().getX() >> 4;
+        int maidChunkZ = maid.blockPosition().getZ() >> 4;
+
+        for (int cx = maidChunkX - chunkRadius; cx <= maidChunkX + chunkRadius; cx++) {
+            for (int cz = maidChunkZ - chunkRadius; cz <= maidChunkZ + chunkRadius; cz++) {
+                if (!level.hasChunk(cx, cz)) continue;
+                LevelChunk chunk = level.getChunk(cx, cz);
+                for (Map.Entry<BlockPos, BlockEntity> entry : chunk.getBlockEntities().entrySet()) {
+                    if (entry.getValue() instanceof SunscreenBeaconBlockEntity) {
+                        BlockPos beaconPosXZ = new BlockPos(entry.getKey().getX(), 0, entry.getKey().getZ());
+                        if (maidPosXZ.distSqr(beaconPosXZ) < distSq) {
+                            // 参数与 Vampirism beacon 一致：160 ticks, level 5, ambient, 无粒子
+                            maid.addEffect(new MobEffectInstance(
+                                    ModEffects.SUNSCREEN.get(), 160, 5, true, false
+                            ));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ========== VNU 伞联动（零编译依赖） ==========
+
+    /**
+     * 通过 Registry Name 检测是否为 VNU 伞物品，不引用任何 VNU 类。
+     * 匹配：namespace=vampiresneedumbrellas, path 包含 umbrella 且不包含 rod
+     */
+    private static boolean isUmbrellaItem(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        return id != null
+                && "vampiresneedumbrellas".equals(id.getNamespace())
+                && id.getPath().contains("umbrella")
+                && !id.getPath().contains("rod");
+    }
+
+    /**
+     * 检测女仆手持或背包中的伞，施加防晒效果并在阳光下消耗耐久。
+     * 搜索顺序：主手 → 副手 → 背包
+     * 效果参数与 VNU 的 SunscreenEffectInstance 一致：21 ticks, level 5, 隐藏
+     */
+    private static void checkUmbrellaProtection(EntityMaid maid, ServerLevel level, VampireMaidCapability cap) {
+        if (!VNU_LOADED) return;
+
+        ItemStack umbrella = ItemStack.EMPTY;
+
+        if (isUmbrellaItem(maid.getMainHandItem())) {
+            umbrella = maid.getMainHandItem();
+        } else if (isUmbrellaItem(maid.getOffhandItem())) {
+            umbrella = maid.getOffhandItem();
+        } else {
+            // 搜索女仆背包（使用 getAvailableInv，根据背包类型限制范围）
+            IItemHandler inv = maid.getAvailableInv(false);
+            for (int i = 0; i < inv.getSlots(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (isUmbrellaItem(stack)) {
+                    umbrella = stack;
+                    break;
+                }
+            }
+        }
+
+        if (umbrella.isEmpty()) return;
+
+        // 施加 sunscreen 效果（21 ticks, level 5, 非 ambient, 隐藏粒子和图标）
+        maid.addEffect(new MobEffectInstance(ModEffects.SUNSCREEN.get(), 21, 5, false, false));
+
+        // 阳光下消耗伞的耐久（等级 5 自然免疫，无需消耗；创造伞无限耐久，跳过）
+        if (isMaidInSunlight(maid) && cap.getVampireLevel() < 5 && umbrella.isDamageableItem()) {
+            ResourceLocation id = ForgeRegistries.ITEMS.getKey(umbrella.getItem());
+            if (id != null && !id.getPath().contains("creative")) {
+                umbrella.hurtAndBreak(1, maid, (e) -> {});
+            }
+        }
+    }
+
+    /**
+     * 判断女仆是否处于阳光直射下（与 SunDamageHandler 逻辑一致）
+     */
+    private static boolean isMaidInSunlight(LivingEntity entity) {
+        Level level = entity.level();
+        BlockPos pos = entity.blockPosition();
+        if (!level.isDay()) return false;
+        if (level.isRaining() && level.canSeeSky(pos)) return false;
+        if (!level.canSeeSky(pos.above())) return false;
+        // 检查 Vampirism 群系/维度配置（vampire_forest 等群系免疫阳光伤害）
+        if (!VampirismAPI.sundamageRegistry().hasSunDamage(level, pos)) return false;
+        return true;
     }
 }
