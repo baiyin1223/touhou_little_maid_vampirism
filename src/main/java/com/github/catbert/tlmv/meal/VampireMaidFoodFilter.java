@@ -3,12 +3,17 @@ package com.github.catbert.tlmv.meal;
 import com.github.catbert.tlmv.TLMVMain;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class VampireMaidFoodFilter {
 
     public static boolean isBloodFood(ItemStack stack) {
         if (stack.isEmpty()) {
+            return false;
+        }
+        // 排除剑类物品（如 Vampirism 的 heart_seeker/heart_striker 吸血鬼之剑）
+        if (stack.getItem() instanceof SwordItem) {
             return false;
         }
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());

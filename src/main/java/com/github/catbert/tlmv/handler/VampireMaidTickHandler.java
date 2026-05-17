@@ -39,10 +39,16 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = TLMVMain.MOD_ID)
 public class VampireMaidTickHandler {
+
+    // 记录正在由我们系统触发进食的女仆 UUID
+    private static final Set<UUID> FEEDING_MAIDS = new HashSet<>();
 
     // VNU (VampiresNeedUmbrellas) 可选联动：零编译依赖，通过 Registry Name 检测
     private static final boolean VNU_LOADED = ModList.get().isLoaded("vampiresneedumbrellas");
@@ -58,6 +64,22 @@ public class VampireMaidTickHandler {
             cap.tick(living);
 
             if (cap.isVampire() && living instanceof PathfinderMob mob) {
+                // 进食后武器恢复补偿：检测进食结束后武器是否错误地到了副手
+                if (mob instanceof EntityMaid maid2) {
+                    if (!maid2.isAlive()) {
+                        FEEDING_MAIDS.remove(maid2.getUUID());
+                    } else if (FEEDING_MAIDS.contains(maid2.getUUID()) && !maid2.isUsingItem()) {
+                        FEEDING_MAIDS.remove(maid2.getUUID());
+                        ItemStack offHand = maid2.getOffhandItem();
+                        ItemStack mainHand = maid2.getMainHandItem();
+                        if (!offHand.isEmpty() && mainHand.isEmpty()) {
+                            maid2.setItemInHand(InteractionHand.MAIN_HAND, offHand.copy());
+                            maid2.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
+                            TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Recovered weapon from offhand to mainhand after feeding");
+                        }
+                    }
+                }
+
                 // 每30秒刷新等级buff，确保永久生效（应对死亡重生等情况）
                 if (mob.tickCount % 600 == 0 && cap.getVampireLevel() > 0) {
                     if (mob instanceof EntityMaid maid) {
@@ -151,12 +173,12 @@ public class VampireMaidTickHandler {
                         return;
                     }
                     // 非血瓶的血液食物走正常 startUsingItem 路径
-                    // 保存当前主手物品到 hideInv，进食完成后 completeUsingItem() 会自动恢复
                     ItemStack mainHandItem = maid.getMainHandItem().copy();
                     maid.setItemInHand(InteractionHand.MAIN_HAND, extracted);
                     maid.memoryHandItemStack(mainHandItem);
                     maid.startUsingItem(InteractionHand.MAIN_HAND);
-                    TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: {}, saved main hand: {}", extracted, mainHandItem);
+                    FEEDING_MAIDS.add(maid.getUUID());
+                    TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: {}", extracted);
                     return;
                 }
             }
