@@ -13,7 +13,7 @@
         {
             "type": "text",
             "title": "Material Requirements",
-            "text": "The following materials and structure point requirements are needed for each level advancement:$(br2)$(bold)Level 1 → 2:$()$(li)Pure Blood (Level 2) ×10$(li)Human Heart ×10$(li)Vampire Book ×1$(li)Structure Points ≥ 18$(br2)$(bold)Level 2 → 3:$()$(li)Pure Blood (Level 2) ×15$(li)Human Heart ×20$(li)Vampire Book ×1$(li)Structure Points ≥ 26$(br2)$(bold)Level 3 → 4:$()$(li)Pure Blood (Level 3) ×20$(li)Human Heart ×30$(li)Vampire Book ×1$(li)Structure Points ≥ 35$(br2)$(bold)Level 4 → 5:$()$(li)Pure Blood (Level 4) ×25$(li)Human Heart ×40$(li)Vampire Book ×1$(li)Structure Points ≥ 44"
+            "text": "The following materials and structure point requirements are needed for each level advancement:$(br2)$(bold)Level 1 → 2:$()$(li)Pure Blood (Level 3) ×10$(li)Human Heart ×10$(li)Vampire Book ×1$(li)Structure Points ≥ 18$(br2)$(bold)Level 2 → 3:$()$(li)Pure Blood (Level 3) ×15$(li)Human Heart ×20$(li)Vampire Book ×1$(li)Structure Points ≥ 26$(br2)$(bold)Level 3 → 4:$()$(li)Pure Blood (Level 4) ×20$(li)Human Heart ×30$(li)Vampire Book ×1$(li)Structure Points ≥ 35$(br2)$(bold)Level 4 → 5:$()$(li)Pure Blood (Level 5) ×25$(li)Human Heart ×40$(li)Vampire Book ×1$(li)Structure Points ≥ 44"
         },
         {
             "type": "text",

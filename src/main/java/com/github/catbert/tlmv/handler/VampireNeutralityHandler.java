@@ -2,11 +2,14 @@ package com.github.catbert.tlmv.handler;
 
 import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.capability.ModAttachments;
-import com.github.catbert.tlmv.capability.VampireMaidCapability;
 import com.github.catbert.tlmv.util.VampirismHelper;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VReference;
 import de.teamlapen.vampirism.api.entity.factions.IFactionEntity;
+import de.teamlapen.vampirism.api.entity.vampire.IVampireMob;
+import de.teamlapen.vampirism.entity.ExtendedCreature;
+import de.teamlapen.vampirism.entity.ai.goals.BiteNearbyEntityVampireGoal;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,6 +27,7 @@ import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = TLMVMain.MOD_ID)
@@ -40,6 +45,14 @@ public class VampireNeutralityHandler {
         }
 
         if (!VampirismHelper.isVampirismLoaded()) {
+            return;
+        }
+
+        // Handle vampire maid: prevent vampirism from attaching ExtendedCreature
+        // with default settings by triggering lazy creation early.
+        // We do NOT set poisonousBlood here — that approach causes smart_slab persistence bugs.
+        // Instead, bite prevention is handled by replacing BiteNearbyEntityVampireGoal below.
+        if (event.getEntity() instanceof EntityMaid) {
             return;
         }
 
@@ -105,6 +118,19 @@ public class VampireNeutralityHandler {
                     false,
                     newPredicate
             ));
+        }
+
+        // Also replace BiteNearbyEntityVampireGoal to exclude vampire maids from bite targets
+        List<WrappedGoal> biteGoalsToReplace = new ArrayList<>();
+        for (WrappedGoal wrappedGoal : mob.goalSelector.getAvailableGoals()) {
+            if (wrappedGoal.getGoal() instanceof BiteNearbyEntityVampireGoal<?>) {
+                biteGoalsToReplace.add(wrappedGoal);
+            }
+        }
+        for (WrappedGoal wrappedGoal : biteGoalsToReplace) {
+            int priority = wrappedGoal.getPriority();
+            mob.goalSelector.removeGoal(wrappedGoal.getGoal());
+            mob.goalSelector.addGoal(priority, new VampireMaidSafeBiteGoal(mob));
         }
     }
 
@@ -192,6 +218,83 @@ public class VampireNeutralityHandler {
         } catch (IllegalAccessException e) {
             TLMVMain.LOGGER.warn("[TLMV] Failed to get original predicate", e);
             return null;
+        }
+    }
+
+    /**
+     * Wrapper around BiteNearbyEntityVampireGoal that excludes vampire maids from bite targets.
+     * Uses reflection to access the private {@code creature} field set by the parent's canFeed logic.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static class VampireMaidSafeBiteGoal extends BiteNearbyEntityVampireGoal {
+        private static final Field CREATURE_FIELD;
+
+        static {
+            try {
+                CREATURE_FIELD = BiteNearbyEntityVampireGoal.class.getDeclaredField("creature");
+                CREATURE_FIELD.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException("[TLMV] Failed to find 'creature' field in BiteNearbyEntityVampireGoal", e);
+            }
+        }
+
+        private final Mob vampireRef;
+
+        VampireMaidSafeBiteGoal(Mob vampire) {
+            super(vampire);
+            this.vampireRef = vampire;
+        }
+
+        @Override
+        public boolean canUse() {
+            IVampireMob vampMob = (IVampireMob) vampireRef;
+            if (!vampMob.wantsBlood()) {
+                return false;
+            }
+
+            AABB bb = getBiteBoundingBox();
+            List<PathfinderMob> list = vampireRef.level().getEntitiesOfClass(
+                    PathfinderMob.class, bb,
+                    EntitySelector.NO_SPECTATORS.and(entity -> entity != vampireRef && entity.isAlive())
+            );
+
+            if (list.size() > 1) {
+                try {
+                    list.sort((o1, o2) -> (int) (vampireRef.distanceToSqr(o1) - vampireRef.distanceToSqr(o2)));
+                } catch (IllegalArgumentException ignored) {
+                    // Duplicate entity reference — skip sorting
+                }
+            }
+
+            for (PathfinderMob o : list) {
+                if (!vampireRef.getSensing().hasLineOfSight(o) || o.hasCustomName()) {
+                    continue;
+                }
+
+                // Exclude vampire maids from bite targets (同族庇护)
+                if (o instanceof EntityMaid maid) {
+                    if (maid.getData(ModAttachments.VAMPIRE_MAID.get()).isVampire()) {
+                        continue;
+                    }
+                }
+
+                Optional<ExtendedCreature> opt = ExtendedCreature.getSafe(o);
+                if (opt.isPresent() && canFeed(opt.get())) {
+                    try {
+                        CREATURE_FIELD.set(this, opt.get());
+                    } catch (IllegalAccessException e) {
+                        TLMVMain.LOGGER.warn("[TLMV] Failed to set creature field", e);
+                        return false;
+                    }
+                    return true;
+                }
+            }
+
+            try {
+                CREATURE_FIELD.set(this, null);
+            } catch (IllegalAccessException ignored) {
+            }
+            return false;
         }
     }
 }

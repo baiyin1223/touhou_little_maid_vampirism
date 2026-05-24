@@ -5,6 +5,7 @@ import com.github.catbert.tlmv.capability.ModAttachments;
 import com.github.catbert.tlmv.capability.VampireMaidCapability;
 import de.teamlapen.vampirism.api.VReference;
 import de.teamlapen.vampirism.api.VampirismAPI;
+import de.teamlapen.vampirism.entity.ExtendedCreature;
 import de.teamlapen.vampirism.entity.factions.FactionPlayerHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -102,12 +103,13 @@ public class ClearMaidVampirePacket implements CustomPacketPayload {
                 cap.setApplyingSlowness(false);
                 cap.resetAutoFeedState();
 
-                // Reset Vampirism blood to 0
+                // Reset Vampirism blood to 0 and clear poisonous blood flag
                 if (entity instanceof PathfinderMob pathfinderMob) {
-                    VampirismAPI.getExtendedCreatureVampirism(pathfinderMob).ifPresent(ext -> {
-                        ext.setBlood(0);
+                    ExtendedCreature.getSafe(pathfinderMob).ifPresent(ec -> {
+                        ec.setBlood(0);
+                        ec.setPoisonousBlood(false);
                         try {
-                            ext.getClass().getMethod("sync").invoke(ext);
+                            ec.getClass().getMethod("sync").invoke(ec);
                         } catch (Exception ignored) {
                         }
                     });
