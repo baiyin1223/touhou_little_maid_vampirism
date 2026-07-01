@@ -8,6 +8,7 @@ import com.github.catbert.tlmv.init.ModBlockEntities;
 import com.github.catbert.tlmv.init.ModBlockItems;
 import com.github.catbert.tlmv.init.ModBlocks;
 import com.github.catbert.tlmv.init.ModMenuTypes;
+import com.github.catbert.tlmv.meal.ExternalBloodFoodRegistry;
 import com.github.catbert.tlmv.network.TLMVNetwork;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -44,6 +45,7 @@ public class TLMVMain {
         modEventBus.addListener(TLMVMain::onBuildCreativeTab);
 
         TLMVConfig.register(modContainer);
+        ExternalBloodFoodRegistry.init();
 
         NeoForge.EVENT_BUS.register(this);
 
