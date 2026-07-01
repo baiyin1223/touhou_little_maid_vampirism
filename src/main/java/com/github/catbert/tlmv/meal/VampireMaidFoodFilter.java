@@ -1,6 +1,7 @@
 package com.github.catbert.tlmv.meal;
 
 import com.github.catbert.tlmv.TLMVMain;
+import de.teamlapen.vampirism.items.VampirismItemBloodFoodItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -15,6 +16,10 @@ public class VampireMaidFoodFilter {
         // 排除剑类物品（如 Vampirism 的 heart_seeker/heart_striker 吸血鬼之剑）
         if (stack.getItem() instanceof SwordItem) {
             return false;
+        }
+        // 0. Vampirism 官方血液食物基类检测（覆盖 Vampirism 自身及 extends 该类的附属模组）
+        if (stack.getItem() instanceof VampirismItemBloodFoodItem) {
+            return true;
         }
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (key == null) {
@@ -44,6 +49,11 @@ public class VampireMaidFoodFilter {
         String path = key.getPath().toLowerCase();
         boolean keywordCheck = path.contains("blood") || path.contains("heart");
         if (keywordCheck) {
+            return true;
+        }
+
+        // 6. 外部血液食物注册表（如 VampiresDelight 等第三方模组的精确映射）
+        if (ExternalBloodFoodRegistry.isBloodFood(key)) {
             return true;
         }
 

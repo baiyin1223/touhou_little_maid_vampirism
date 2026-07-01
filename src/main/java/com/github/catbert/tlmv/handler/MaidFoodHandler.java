@@ -2,6 +2,7 @@ package com.github.catbert.tlmv.handler;
 
 import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.capability.ModCapabilities;
+import com.github.catbert.tlmv.meal.ExternalBloodFoodRegistry;
 import com.github.catbert.tlmv.meal.VampireMaidFoodFilter;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
@@ -12,12 +13,21 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Mod.EventBusSubscriber(modid = TLMVMain.MOD_ID)
 public class MaidFoodHandler {
+
+    // 正在进食外部血液食物注册表物品的吸血鬼女仆 UUID
+    // 用于在 MobEffectEvent.Applicable 中拦截 VampiresDelight 等模组对非吸血鬼施加的负面效果
+    private static final Set<UUID> EXTERNAL_FOOD_EATING = new HashSet<>();
 
     @SubscribeEvent
     public static void onItemUseStart(LivingEntityUseItemEvent.Start event) {
@@ -36,6 +46,12 @@ public class MaidFoodHandler {
                 if (!VampireMaidFoodFilter.isBloodFood(item)) {
                     event.setCanceled(true);
                     TLMVMain.LOGGER.info("[MaidFoodHandler] Canceling non-blood food for vampire maid: {}", item.getItem());
+                } else {
+                    // 外部注册表食物：标记正在进食，用于拦截负面效果
+                    ResourceLocation itemKey = ForgeRegistries.ITEMS.getKey(item.getItem());
+                    if (itemKey != null && ExternalBloodFoodRegistry.isBloodFood(itemKey)) {
+                        EXTERNAL_FOOD_EATING.add(entity.getUUID());
+                    }
                 }
             }
         });
@@ -135,6 +151,35 @@ public class MaidFoodHandler {
                 TLMVMain.LOGGER.debug("[MaidFoodHandler] Cleared negative effects after blood food: {}", stack.getItem());
             }
         });
+
+        // 清除外部食物进食标记
+        EXTERNAL_FOOD_EATING.remove(entity.getUUID());
+    }
+
+    /**
+     * 拦截 VampiresDelight 等外部模组对非吸血鬼消费者施加的负面食物效果。
+     * 仅在吸血鬼女仆进食 {@link ExternalBloodFoodRegistry} 中注册的物品时生效，
+     * 不会误拦截来自其他来源（如药水、指令）的相同效果。
+     */
+    @SubscribeEvent
+    public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) return;
+        if (!EXTERNAL_FOOD_EATING.contains(entity.getUUID())) return;
+
+        var effect = event.getEffectInstance().getEffect();
+        // VampiresDelight 的 VDFoodValues 中定义的人类负面效果：
+        // CONFUSION (所有 NASTY 变体), BLINDNESS (NASTY_BLINDNESS), DARKNESS (NASTY_DARKNESS),
+        // HUNGER (NASTY_BLOOD_DOUGH), POISON (NASTY_POISON, ORCHID_TEA_HUMAN)
+        if (effect == MobEffects.CONFUSION
+                || effect == MobEffects.BLINDNESS
+                || effect == MobEffects.DARKNESS
+                || effect == MobEffects.HUNGER
+                || effect == MobEffects.POISON) {
+            event.setResult(MobEffectEvent.Applicable.Result.DENY);
+            TLMVMain.LOGGER.debug("[MaidFoodHandler] Blocked external food negative effect {} for vampire maid",
+                    effect.getDisplayName().getString());
+        }
     }
 
     private static boolean isBloodBottle(ItemStack stack) {
@@ -145,6 +190,12 @@ public class MaidFoodHandler {
     private static int getRestoreAmount(ItemStack stack) {
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (key == null) return 2;
+
+        // 优先查询外部血液食物注册表（如 VampiresDelight 等第三方模组精确映射）
+        int externalValue = ExternalBloodFoodRegistry.getBloodValue(key);
+        if (externalValue >= 0) {
+            return externalValue;
+        }
 
         String name = key.toString();
 
