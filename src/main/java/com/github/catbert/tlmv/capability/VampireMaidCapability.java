@@ -11,6 +11,11 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
     private boolean hadSanguinare = false;
     private int vampireLevel = 0;
 
+    // Hunter maid fields
+    private boolean isHunter = false;
+    private int hunterLevel = 0;
+    private boolean poisonousBlood = false;
+
     // Blood decay tracking fields
     private int lastKnownBlood = -1;  // -1 表示未初始化
     private int bloodDecayTimer = 0;   // 高血量衰减计时器
@@ -53,6 +58,16 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
     public void setVampireLevel(int level) {
         this.vampireLevel = Math.max(0, Math.min(5, level));
     }
+
+    // Hunter maid getters/setters
+    public boolean isHunter() { return isHunter; }
+    public void setHunter(boolean hunter) { this.isHunter = hunter; }
+
+    public int getHunterLevel() { return hunterLevel; }
+    public void setHunterLevel(int level) { this.hunterLevel = Math.max(0, Math.min(5, level)); }
+
+    public boolean isPoisonousBlood() { return poisonousBlood; }
+    public void setPoisonousBlood(boolean poison) { this.poisonousBlood = poison; }
 
     public boolean isApplyingSlowness() {
         return applyingSlowness;
@@ -127,6 +142,9 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
         tag.putInt("garlicHpTicker", garlicHpTicker);
         tag.putInt("garlicBloodTicker", garlicBloodTicker);
         tag.putInt("autoFeedTimer", autoFeedTimer);
+        tag.putBoolean("isHunter", isHunter);
+        tag.putInt("hunterLevel", hunterLevel);
+        tag.putBoolean("poisonousBlood", poisonousBlood);
         tag.putInt("autoFeedState", autoFeedState);
         tag.putInt("autoFeedMoveTimer", autoFeedMoveTimer);
         if (autoFeedTargetUUID != null) {
@@ -163,6 +181,9 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
         this.garlicHpTicker = tag.contains("garlicHpTicker") ? tag.getInt("garlicHpTicker") : 0;
         this.garlicBloodTicker = tag.contains("garlicBloodTicker") ? tag.getInt("garlicBloodTicker") : 0;
         this.autoFeedTimer = tag.getInt("autoFeedTimer");
+        this.isHunter = tag.getBoolean("isHunter");
+        this.hunterLevel = tag.getInt("hunterLevel");
+        this.poisonousBlood = tag.contains("poisonousBlood") ? tag.getBoolean("poisonousBlood") : false;
         this.autoFeedState = tag.getInt("autoFeedState");
         this.autoFeedMoveTimer = tag.getInt("autoFeedMoveTimer");
         if (tag.hasUUID("autoFeedTargetUUID")) {

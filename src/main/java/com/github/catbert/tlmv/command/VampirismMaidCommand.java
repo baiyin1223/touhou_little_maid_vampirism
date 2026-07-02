@@ -2,6 +2,7 @@ package com.github.catbert.tlmv.command;
 
 import com.github.catbert.tlmv.capability.ModCapabilities;
 import com.github.catbert.tlmv.capability.VampireMaidCapability;
+import com.github.catbert.tlmv.level.HunterLevelManager;
 import com.github.catbert.tlmv.level.VampireLevelManager;
 import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
 import com.github.catbert.tlmv.network.TLMVNetwork;
@@ -38,6 +39,18 @@ public class VampirismMaidCommand {
                         .executes(context -> {
                             int level = IntegerArgumentType.getInteger(context, "level");
                             return setLevel(context.getSource(), level);
+                        })
+                    )
+                )
+                .then(Commands.literal("set")
+                    .then(Commands.literal("hunter")
+                        .executes(context -> setHunter(context.getSource(), true)))
+                )
+                .then(Commands.literal("hunter_level")
+                    .then(Commands.argument("level", IntegerArgumentType.integer(1, 5))
+                        .executes(context -> {
+                            int level = IntegerArgumentType.getInteger(context, "level");
+                            return setHunterLevel(context.getSource(), level);
                         })
                     )
                 )
@@ -81,12 +94,14 @@ public class VampirismMaidCommand {
             cap.setVampire(false);
             cap.setVampireLevel(0);
             cap.setHadSanguinare(false);
+            cap.setHunter(false);
+            cap.setHunterLevel(0);
             source.sendSuccess(() -> Component.literal("已将女仆恢复为普通状态"), true);
         }
 
         TLMVNetwork.INSTANCE.send(
                 PacketDistributor.TRACKING_ENTITY.with(() -> target),
-                new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel())
+                new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel(), cap.isHunter(), cap.getHunterLevel())
         );
 
         return 1;
@@ -137,6 +152,102 @@ public class VampirismMaidCommand {
         );
 
         source.sendSuccess(() -> Component.translatable("message.touhou_little_maid_vampirism.level_set", level), true);
+        return 1;
+    }
+
+    private static int setHunter(CommandSourceStack source, boolean hunter) {
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (CommandSyntaxException e) {
+            source.sendFailure(Component.literal("该指令只能由玩家执行"));
+            return 0;
+        }
+
+        Entity target = getTargetEntity(player);
+        if (target == null) {
+            source.sendFailure(Component.literal("没有指向任何实体"));
+            return 0;
+        }
+
+        ResourceLocation entityKey = ForgeRegistries.ENTITY_TYPES.getKey(target.getType());
+        if (entityKey == null || !"touhou_little_maid".equals(entityKey.getNamespace())) {
+            source.sendFailure(Component.literal("目标不是女仆实体"));
+            return 0;
+        }
+
+        Optional<VampireMaidCapability> capOpt = ModCapabilities.getVampireMaid(target).resolve();
+        if (capOpt.isEmpty()) {
+            source.sendFailure(Component.literal("目标女仆没有吸血鬼能力数据"));
+            return 0;
+        }
+        VampireMaidCapability cap = capOpt.get();
+
+        if (hunter) {
+            if (cap.isVampire()) {
+                source.sendFailure(Component.literal("吸血鬼女仆不能转变为猎人女仆"));
+                return 0;
+            }
+            cap.setHunter(true);
+            cap.setHunterLevel(1);
+            source.sendSuccess(() -> Component.literal("已将女仆转变为猎人"), true);
+        } else {
+            cap.setHunter(false);
+            cap.setHunterLevel(0);
+            source.sendSuccess(() -> Component.literal("已将女仆恢复为普通状态"), true);
+        }
+
+        TLMVNetwork.INSTANCE.send(
+                PacketDistributor.TRACKING_ENTITY.with(() -> target),
+                new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel(), cap.isHunter(), cap.getHunterLevel())
+        );
+        return 1;
+    }
+
+    private static int setHunterLevel(CommandSourceStack source, int level) {
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (CommandSyntaxException e) {
+            source.sendFailure(Component.literal("该指令只能由玩家执行"));
+            return 0;
+        }
+
+        Entity target = getTargetEntity(player);
+        if (target == null) {
+            source.sendFailure(Component.literal("没有指向任何实体"));
+            return 0;
+        }
+
+        ResourceLocation entityKey = ForgeRegistries.ENTITY_TYPES.getKey(target.getType());
+        if (entityKey == null || !"touhou_little_maid".equals(entityKey.getNamespace())) {
+            source.sendFailure(Component.literal("目标不是女仆实体"));
+            return 0;
+        }
+
+        Optional<VampireMaidCapability> capOpt = ModCapabilities.getVampireMaid(target).resolve();
+        if (capOpt.isEmpty()) {
+            source.sendFailure(Component.literal("目标女仆没有吸血鬼能力数据"));
+            return 0;
+        }
+        VampireMaidCapability cap = capOpt.get();
+
+        if (!cap.isHunter()) {
+            source.sendFailure(Component.translatable("message.touhou_little_maid_vampirism.not_hunter"));
+            return 0;
+        }
+
+        cap.setHunterLevel(level);
+        if (target instanceof com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid maid) {
+            HunterLevelManager.applyLevel(maid, level);
+        }
+
+        TLMVNetwork.INSTANCE.send(
+                PacketDistributor.TRACKING_ENTITY.with(() -> target),
+                new SyncVampireMaidPacket(target.getId(), cap.isVampire(), cap.getVampireLevel(), cap.isHunter(), cap.getHunterLevel())
+        );
+
+        source.sendSuccess(() -> Component.translatable("message.touhou_little_maid_vampirism.hunter_level_set", level), true);
         return 1;
     }
 

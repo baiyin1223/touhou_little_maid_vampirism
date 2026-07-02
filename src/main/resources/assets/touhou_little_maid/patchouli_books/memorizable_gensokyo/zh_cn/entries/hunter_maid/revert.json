@@ -1,0 +1,14 @@
+{
+    "sortnum": 7,
+    "name": "变回人类",
+    "icon": "vampirism:injection_sanguinare",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "title": "变回人类",
+            "item": "vampirism:injection_sanguinare",
+            "text": "如果你想让猎人女仆变回普通女仆，可以使用$(item)嗜血注射器$()。$(br2)手持嗜血注射器，在潜行状态下右键点击猎人女仆，会弹出一个确认界面。点击$(bold)确认$()后，女仆将清除所有猎人能力并死亡，你需要使用胶片来复活她。$(br2)此操作消耗 1 个嗜血注射器（创造模式不消耗）。$(br2)$(italic)注意：此操作不可逆，请谨慎使用。$()"
+        }
+    ]
+}

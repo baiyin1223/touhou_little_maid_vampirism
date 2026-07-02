@@ -1,0 +1,23 @@
+{
+    "sortnum": 3,
+    "name": "Vampire Hunting",
+    "icon": "vampirism:basic_crossbow",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Crossbow Hunt",
+            "text": "Hunter maids can equip a hunter crossbow to hunt vampires at range.$(br2)Simply place the crossbow in the maid's main hand, with arrows or firework rockets in the offhand or backpack. The maid will automatically search and shoot vampires within range. Arrows are consumed from the inventory.$(br2)At $(bold)Lv.3$() or higher, the maid can use advanced crossbows (non-basic) — these fire an $(bold)extra arrow$() per shot, greatly increasing firepower!$(br2)$(bold)$(c)Note:$() The Vampirism double crossbow has a known bug — the second arrow rarely hits its target, often bouncing in slow motion or phasing through entities. Even players struggle to land both arrows. This is a Vampirism mod issue, not caused by this mod."
+        },
+        {
+            "type": "text",
+            "title": "Stake Hunt",
+            "text": "Hunter maids can also equip a $(item)Stake$() to hunt vampires in melee.$(br2)The stake is a lethal weapon against vampires — when the maid reaches $(bold)Lv.4$() or higher, stake attacks can $(bold)insta-kill$() all vampires!"
+        },
+        {
+            "type": "text",
+            "title": "Kill Loot",
+            "text": "Hunter maids have a chance to drop extra loot when killing vampires:$(br2)$(li)$(item)Vampire Soul$() (vampirism:soul_orb_vampire)$(li)$(item)Vampire Blood$() (vampirism:vampire_blood_bottle)$(br2)Both tasks share this drop mechanic."
+        }
+    ]
+}

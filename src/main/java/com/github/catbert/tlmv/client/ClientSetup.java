@@ -2,6 +2,7 @@ package com.github.catbert.tlmv.client;
 
 import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.client.gui.MaidAltarScreen;
+import com.github.catbert.tlmv.client.gui.MaidTrainingScreen;
 import com.github.catbert.tlmv.client.renderer.MaidAltarBESR;
 import com.github.catbert.tlmv.init.ModBlockEntities;
 import com.github.catbert.tlmv.init.ModMenuTypes;
@@ -19,6 +20,7 @@ public class ClientSetup {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(ModMenuTypes.MAID_ALTAR.get(), MaidAltarScreen::new);
+            MenuScreens.register(ModMenuTypes.MAID_TRAINING.get(), MaidTrainingScreen::new);
         });
     }
 

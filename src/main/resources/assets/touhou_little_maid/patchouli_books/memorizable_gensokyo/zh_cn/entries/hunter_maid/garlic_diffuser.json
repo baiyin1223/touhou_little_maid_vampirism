@@ -1,0 +1,13 @@
+{
+    "sortnum": 5,
+    "name": "移动大蒜扩散器",
+    "icon": "vampirism:garlic_diffuser_normal",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "移动大蒜扩散器",
+            "text": "猎人女仆可以化身为$(bold)移动大蒜扩散器$()！$(br2)只需在女仆背包中放入任意一种$(item)喷蒜器$()（普通/改进/弱化）和$(item)纯化大蒜$()作为燃料，女仆就会自动以自身为中心产生大蒜效果区域。$(br2)大蒜效果会持续消耗纯化大蒜，每 2 分钟消耗 1 个。吸血鬼进入女仆附近范围时会受到大蒜效果。"
+        }
+    ]
+}

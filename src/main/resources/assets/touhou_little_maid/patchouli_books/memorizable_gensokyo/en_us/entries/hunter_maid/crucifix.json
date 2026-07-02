@@ -1,0 +1,48 @@
+{
+    "sortnum": 6,
+    "name": "Crucifix Bauble",
+    "icon": "vampirism:crucifix_normal",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "title": "Crucifix Bauble",
+            "item": "vampirism:crucifix_normal",
+            "text": "Hunter maids can equip $(bold)crucifixes$() in their bauble slot to automatically repel undead and vampires!$(br2)When equipped, the maid periodically pushes away all nearby $(#ff0000)undead$() and $(#ff0000)vampire$() entities, preventing them from closing in. The effect is identical to a player holding a crucifix, but requires no manual input."
+        },
+        {
+            "type": "text",
+            "title": "Three Crucifix Tiers",
+            "text": "Three crucifix types are available, each requiring a different hunter level:$(br2)$(li)$(item)Normal Crucifix$() (Wooden) — Range 4, requires $(bold)Lv.1+$()$(li)$(item)Enhanced Crucifix$() (Iron) — Range 8, requires $(bold)Lv.3+$()$(li)$(item)Ultimate Crucifix$() (Golden) — Range 10, requires $(bold)Lv.5+$()$(br2)Higher-tier crucifixes offer greater range and stronger suppression against powerful vampires."
+        },
+        {
+            "type": "text",
+            "title": "Usage Notes",
+            "text": "$(li)The crucifix must be placed in the maid's $(bold)bauble slot$() to take effect.$(li)Hunter maids below the required level will not trigger any effect.$(li)The repulsion effect works on $(#ff0000)undead$() (zombies, skeletons, etc.) and $(#ff0000)vampires$(), but does not affect players.$(li)Crucifixes are hunter-exclusive equipment; vampire maids cannot utilize them."
+        }
+    ]
+}
+{
+    "sortnum": 6,
+    "name": "Crucifix Bauble",
+    "icon": "vampirism:crucifix_normal",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Crucifix Bauble",
+            "item": "vampirism:crucifix_normal",
+            "text": "Hunter maids can equip $(bold)crucifixes$() in their bauble slot to automatically repel undead and vampires!$(br2)When equipped, the maid periodically pushes away all nearby $(#ff0000)undead$() and $(#ff0000)vampire$() entities, preventing them from closing in. The effect is identical to a player holding a crucifix, but requires no manual input."
+        },
+        {
+            "type": "text",
+            "title": "Three Crucifix Tiers",
+            "text": "Three crucifix types are available, each requiring a different hunter level:$(br2)$(li)$(item)Normal Crucifix$() (Wooden) — Range 4, requires $(bold)Lv.1+$()$(li)$(item)Enhanced Crucifix$() (Iron) — Range 8, requires $(bold)Lv.3+$()$(li)$(item)Ultimate Crucifix$() (Golden) — Range 10, requires $(bold)Lv.5+$()$(br2)Higher-tier crucifixes offer greater range and stronger suppression against powerful vampires."
+        },
+        {
+            "type": "text",
+            "title": "Usage Notes",
+            "text": "$(li)The crucifix must be placed in the maid's $(bold)bauble slot$() to take effect.$(li)Hunter maids below the required level will not trigger any effect.$(li)The repulsion effect works on $(#ff0000)undead$() (zombies, skeletons, etc.) and $(#ff0000)vampires$(), but does not affect players.$(li)Crucifixes are hunter-exclusive equipment; vampire maids cannot utilize them."
+        }
+    ]
+}

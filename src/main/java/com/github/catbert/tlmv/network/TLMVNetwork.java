@@ -29,5 +29,17 @@ public class TLMVNetwork {
                 ClearMaidVampirePacket::encode,
                 ClearMaidVampirePacket::new,
                 ClearMaidVampirePacket::handle);
+        INSTANCE.registerMessage(packetId++, OpenMaidTrainingPacket.class,
+                OpenMaidTrainingPacket::encode,
+                OpenMaidTrainingPacket::decode,
+                OpenMaidTrainingPacket::handle);
+        INSTANCE.registerMessage(packetId++, PromoteMaidPacket.class,
+                PromoteMaidPacket::encode,
+                PromoteMaidPacket::decode,
+                PromoteMaidPacket::handle);
+        INSTANCE.registerMessage(packetId++, RevertHunterMaidPacket.class,
+                RevertHunterMaidPacket::encode,
+                RevertHunterMaidPacket::decode,
+                RevertHunterMaidPacket::handle);
     }
 }

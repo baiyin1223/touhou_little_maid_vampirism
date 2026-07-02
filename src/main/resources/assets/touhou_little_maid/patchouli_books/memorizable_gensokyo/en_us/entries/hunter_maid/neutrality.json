@@ -1,0 +1,13 @@
+{
+    "sortnum": 2,
+    "name": "Hunters and Hunter Maids",
+    "icon": "vampirism:hunter_coat_head_normal",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Hunter-Friendly Relations",
+            "text": "Hunter Maids maintain friendly relations with the Hunter faction. Hunters will not actively attack Hunter Maids, and will not retaliate even if attacked by one.$(br2)This means Hunter Maids will not be considered threats by hunters. You can safely send Hunter Maids to perform tasks near Hunter camps."
+        }
+    ]
+}
