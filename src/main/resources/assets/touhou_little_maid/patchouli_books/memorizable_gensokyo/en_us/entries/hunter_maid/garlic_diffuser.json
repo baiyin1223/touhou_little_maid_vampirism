@@ -1,0 +1,13 @@
+{
+    "sortnum": 5,
+    "name": "Mobile Garlic Diffuser",
+    "icon": "vampirism:garlic_diffuser_normal",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Mobile Garlic Diffuser",
+            "text": "Hunter maids can become a $(bold)mobile garlic diffuser$()!$(br2)Simply place any type of $(item)Garlic Diffuser$() (normal/improved/weak) and $(item)Purified Garlic$() as fuel in the maid's backpack. The maid will automatically create a garlic effect area centered on herself.$(br2)The garlic effect consumes Purified Garlic as fuel, using 1 every 2 minutes. Vampires entering the maid's vicinity will take garlic damage."
+        }
+    ]
+}

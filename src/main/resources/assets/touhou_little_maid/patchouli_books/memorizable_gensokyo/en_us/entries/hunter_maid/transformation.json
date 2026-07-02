@@ -1,0 +1,38 @@
+{
+    "sortnum": 0,
+    "name": "Transformation & Promotion",
+    "icon": "vampirism:injection_garlic",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "Hunter Maid Transformation",
+            "text": "To transform a normal maid into a Hunter Maid, you need a $(item)Garlic Injection$().$(br2)Hold the Garlic Injection and sneak-right-click on a maid to complete the transformation. Upon success, a lightning bolt visual will appear at the maid's location, and a chat message will confirm the conversion.$(br2)The transformed Hunter Maid becomes the nemesis of vampires, possessing poisonous blood."
+        },
+        {
+            "type": "text",
+            "title": "Notes",
+            "text": "$(li)Vampire maids cannot be transformed into Hunter Maids.$(li)Maids who are already Hunter Maids cannot be transformed again.$(li)Transformation consumes one Garlic Injection (not consumed in Creative mode).$(li)Hunter Maids can eat normal food."
+        },
+        {
+            "type": "text",
+            "title": "Hunter Maid Level System",
+            "text": "Hunter Maids have levels 1 through 5, each with a unique title and stat bonuses:$(br2)$(li)Lv.1 - Hunter Apprentice$(li)Lv.2 - Hunter Scout$(li)Lv.3 - Elite Hunter$(li)Lv.4 - Hunter Master$(li)Lv.5 - Demon Hunter Maiden$(br2)Higher levels provide better health, armor, attack damage, and knockback resistance."
+        },
+        {
+            "type": "text",
+            "title": "Promotion Method",
+            "text": "Hunter Maids can be promoted via a $(item)Vampire Hunter Trainer$().$(br2)The player must have a hunter level of $(bold)Lv.4$() or higher. Find a Hunter Trainer and interact to open their training GUI.$(br2)A $(bold)'Train Maid'$() button appears in the top-right corner — click it to open the Hunter Maid promotion screen."
+        },
+        {
+            "type": "text",
+            "title": "Promotion Mats ",
+            "text": "$(bold)Lv.1 → 2 materials:$()$(br)$(li)Iron Ingot ×10$(li)Gold Ingot ×5$(li)Vampire Book ×1$(li)Vampire Soul ×3$(li)Pure Blood 2 ×5$(br2)$(bold)Lv.2 → 3 materials:$()$(br)$(li)Iron Ingot ×15$(li)Gold Ingot ×10$(li)Vampire Book ×1$(li)Vampire Soul ×5$(li)Pure Blood 3 ×10"
+        },
+        {
+            "type": "text",
+            "title": "Promotion Mats ",
+            "text": "$(bold)Lv.3 → 4 materials:$()$(br)$(li)Iron Ingot ×20$(li)Gold Ingot ×15$(li)Vampire Book ×1$(li)Vampire Soul ×8$(li)Pure Blood 4 ×15$(br2)$(bold)Lv.4 → 5 materials:$()$(br)$(li)Iron Ingot ×30$(li)Gold Ingot ×20$(li)Vampire Book ×1$(li)Vampire Soul ×12$(li)Pure Blood 5 ×20$(br2)The promotion screen has 5 slots for materials. When enough are provided, click 'Promote Maid' and nearby hunter maids belonging to you will level up with a lightning visual."
+        }
+    ]
+}

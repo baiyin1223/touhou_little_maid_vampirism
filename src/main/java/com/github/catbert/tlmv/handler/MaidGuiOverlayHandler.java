@@ -29,12 +29,17 @@ public class MaidGuiOverlayHandler {
         }
 
         VampireMaidCapability cap = maid.getData(ModAttachments.VAMPIRE_MAID.get());
-        if (!cap.isVampire()) {
+
+        Component displayText;
+        if (cap.isVampire()) {
+            int level = cap.getVampireLevel();
+            displayText = Component.translatable("gui.touhou_little_maid_vampirism.vampire_rank." + level);
+        } else if (cap.isHunter()) {
+            int level = cap.getHunterLevel();
+            displayText = Component.translatable("gui.touhou_little_maid_vampirism.hunter_rank." + level);
+        } else {
             return;
         }
-
-        int level = cap.getVampireLevel();
-        Component displayText = Component.translatable("gui.touhou_little_maid_vampirism.vampire_rank." + level);
 
         GuiGraphics graphics = event.getGuiGraphics();
         Font font = Minecraft.getInstance().font;

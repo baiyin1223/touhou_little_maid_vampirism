@@ -67,6 +67,43 @@ public final class LevelingConfig {
         L4_STRUCTURE_POINTS = builder.comment("Required structure points for maid level 4 -> 5").defineInRange("structurePoints", 44, 0, 100);
         builder.pop();
 
+        // Hunter maid leveling
+        builder.push("hunter_level_1_to_2");
+        HL1_IRON_QUANTITY = builder.comment("Required iron ingots for hunter maid 1->2").defineInRange("ironQuantity", 10, 0, 64);
+        HL1_GOLD_QUANTITY = builder.comment("Required gold ingots for hunter maid 1->2").defineInRange("goldQuantity", 5, 0, 64);
+        HL1_PURE_BLOOD_LEVEL = builder.comment("Required pure blood level for hunter maid 1->2").defineInRange("pureBloodLevel", 1, 0, 4);
+        HL1_PURE_BLOOD_QUANTITY = builder.comment("Required pure blood quantity for hunter maid 1->2").defineInRange("pureBloodQuantity", 5, 0, 64);
+        HL1_VAMPIRE_BOOK_QUANTITY = builder.comment("Required vampire book quantity for hunter maid 1->2").defineInRange("vampireBookQuantity", 1, 0, 64);
+        HL1_SOUL_ORB_QUANTITY = builder.comment("Required soul orb quantity for hunter maid 1->2").defineInRange("soulOrbQuantity", 3, 0, 64);
+        builder.pop();
+
+        builder.push("hunter_level_2_to_3");
+        HL2_IRON_QUANTITY = builder.defineInRange("ironQuantity", 15, 0, 64);
+        HL2_GOLD_QUANTITY = builder.defineInRange("goldQuantity", 10, 0, 64);
+        HL2_PURE_BLOOD_LEVEL = builder.defineInRange("pureBloodLevel", 2, 0, 4);
+        HL2_PURE_BLOOD_QUANTITY = builder.defineInRange("pureBloodQuantity", 10, 0, 64);
+        HL2_VAMPIRE_BOOK_QUANTITY = builder.defineInRange("vampireBookQuantity", 1, 0, 64);
+        HL2_SOUL_ORB_QUANTITY = builder.defineInRange("soulOrbQuantity", 5, 0, 64);
+        builder.pop();
+
+        builder.push("hunter_level_3_to_4");
+        HL3_IRON_QUANTITY = builder.defineInRange("ironQuantity", 20, 0, 64);
+        HL3_GOLD_QUANTITY = builder.defineInRange("goldQuantity", 15, 0, 64);
+        HL3_PURE_BLOOD_LEVEL = builder.defineInRange("pureBloodLevel", 3, 0, 4);
+        HL3_PURE_BLOOD_QUANTITY = builder.defineInRange("pureBloodQuantity", 15, 0, 64);
+        HL3_VAMPIRE_BOOK_QUANTITY = builder.defineInRange("vampireBookQuantity", 1, 0, 64);
+        HL3_SOUL_ORB_QUANTITY = builder.defineInRange("soulOrbQuantity", 8, 0, 64);
+        builder.pop();
+
+        builder.push("hunter_level_4_to_5");
+        HL4_IRON_QUANTITY = builder.defineInRange("ironQuantity", 30, 0, 64);
+        HL4_GOLD_QUANTITY = builder.defineInRange("goldQuantity", 20, 0, 64);
+        HL4_PURE_BLOOD_LEVEL = builder.defineInRange("pureBloodLevel", 4, 0, 4);
+        HL4_PURE_BLOOD_QUANTITY = builder.defineInRange("pureBloodQuantity", 20, 0, 64);
+        HL4_VAMPIRE_BOOK_QUANTITY = builder.defineInRange("vampireBookQuantity", 1, 0, 64);
+        HL4_SOUL_ORB_QUANTITY = builder.defineInRange("soulOrbQuantity", 12, 0, 64);
+        builder.pop();
+
         builder.pop();
     }
 
@@ -97,5 +134,68 @@ public final class LevelingConfig {
     }
 
     public record LevelRequirements(int pureBloodLevel, int pureBloodQuantity, int humanHeartQuantity, int vampireBookQuantity, int structurePoints) {
+    }
+
+    // ===== Hunter Maid Leveling =====
+
+    // Level 1 -> 2
+    public static ModConfigSpec.IntValue HL1_IRON_QUANTITY;
+    public static ModConfigSpec.IntValue HL1_GOLD_QUANTITY;
+    public static ModConfigSpec.IntValue HL1_PURE_BLOOD_LEVEL;
+    public static ModConfigSpec.IntValue HL1_PURE_BLOOD_QUANTITY;
+    public static ModConfigSpec.IntValue HL1_VAMPIRE_BOOK_QUANTITY;
+    public static ModConfigSpec.IntValue HL1_SOUL_ORB_QUANTITY;
+
+    // Level 2 -> 3
+    public static ModConfigSpec.IntValue HL2_IRON_QUANTITY;
+    public static ModConfigSpec.IntValue HL2_GOLD_QUANTITY;
+    public static ModConfigSpec.IntValue HL2_PURE_BLOOD_LEVEL;
+    public static ModConfigSpec.IntValue HL2_PURE_BLOOD_QUANTITY;
+    public static ModConfigSpec.IntValue HL2_VAMPIRE_BOOK_QUANTITY;
+    public static ModConfigSpec.IntValue HL2_SOUL_ORB_QUANTITY;
+
+    // Level 3 -> 4
+    public static ModConfigSpec.IntValue HL3_IRON_QUANTITY;
+    public static ModConfigSpec.IntValue HL3_GOLD_QUANTITY;
+    public static ModConfigSpec.IntValue HL3_PURE_BLOOD_LEVEL;
+    public static ModConfigSpec.IntValue HL3_PURE_BLOOD_QUANTITY;
+    public static ModConfigSpec.IntValue HL3_VAMPIRE_BOOK_QUANTITY;
+    public static ModConfigSpec.IntValue HL3_SOUL_ORB_QUANTITY;
+
+    // Level 4 -> 5
+    public static ModConfigSpec.IntValue HL4_IRON_QUANTITY;
+    public static ModConfigSpec.IntValue HL4_GOLD_QUANTITY;
+    public static ModConfigSpec.IntValue HL4_PURE_BLOOD_LEVEL;
+    public static ModConfigSpec.IntValue HL4_PURE_BLOOD_QUANTITY;
+    public static ModConfigSpec.IntValue HL4_VAMPIRE_BOOK_QUANTITY;
+    public static ModConfigSpec.IntValue HL4_SOUL_ORB_QUANTITY;
+
+    public static record HunterLevelRequirements(int ironQuantity, int goldQuantity, int pureBloodLevel, int pureBloodQuantity, int vampireBookQuantity, int soulOrbQuantity) {
+    }
+
+    public static HunterLevelRequirements getHunterRequirements(int targetLevel) {
+        return switch (targetLevel) {
+            case 2 -> new HunterLevelRequirements(
+                    HL1_IRON_QUANTITY.get(), HL1_GOLD_QUANTITY.get(),
+                    HL1_PURE_BLOOD_LEVEL.get(), HL1_PURE_BLOOD_QUANTITY.get(),
+                    HL1_VAMPIRE_BOOK_QUANTITY.get(), HL1_SOUL_ORB_QUANTITY.get()
+            );
+            case 3 -> new HunterLevelRequirements(
+                    HL2_IRON_QUANTITY.get(), HL2_GOLD_QUANTITY.get(),
+                    HL2_PURE_BLOOD_LEVEL.get(), HL2_PURE_BLOOD_QUANTITY.get(),
+                    HL2_VAMPIRE_BOOK_QUANTITY.get(), HL2_SOUL_ORB_QUANTITY.get()
+            );
+            case 4 -> new HunterLevelRequirements(
+                    HL3_IRON_QUANTITY.get(), HL3_GOLD_QUANTITY.get(),
+                    HL3_PURE_BLOOD_LEVEL.get(), HL3_PURE_BLOOD_QUANTITY.get(),
+                    HL3_VAMPIRE_BOOK_QUANTITY.get(), HL3_SOUL_ORB_QUANTITY.get()
+            );
+            case 5 -> new HunterLevelRequirements(
+                    HL4_IRON_QUANTITY.get(), HL4_GOLD_QUANTITY.get(),
+                    HL4_PURE_BLOOD_LEVEL.get(), HL4_PURE_BLOOD_QUANTITY.get(),
+                    HL4_VAMPIRE_BOOK_QUANTITY.get(), HL4_SOUL_ORB_QUANTITY.get()
+            );
+            default -> null;
+        };
     }
 }

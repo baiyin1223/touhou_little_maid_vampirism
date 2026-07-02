@@ -1,0 +1,14 @@
+{
+    "sortnum": 7,
+    "name": "Revert to Human",
+    "icon": "vampirism:injection_sanguinare",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "patchouli:spotlight",
+            "title": "Revert to Human",
+            "item": "vampirism:injection_sanguinare",
+            "text": "If you want to turn a Hunter Maid back into a normal maid, use a $(item)Sanguinare Injection$().$(br2)Hold the Sanguinare Injection and sneak-right-click on the Hunter Maid to open a confirmation screen. Click $(bold)Confirm$() to clear all hunter abilities. The maid will die and you will need to use film to revive her.$(br2)This action consumes 1 Sanguinare Injection (not consumed in Creative mode).$(br2)$(italic)Note: This action is irreversible. Use with caution.$()"
+        }
+    ]
+}

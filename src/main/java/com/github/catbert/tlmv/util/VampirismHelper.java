@@ -1,10 +1,13 @@
 package com.github.catbert.tlmv.util;
 
+import com.github.catbert.tlmv.TLMVMain;
+import de.teamlapen.vampirism.api.VampirismAttachments;
 import de.teamlapen.vampirism.api.VampirismDataComponents;
 import de.teamlapen.vampirism.api.components.IBottleBlood;
 import de.teamlapen.vampirism.items.component.BottleBlood;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -106,5 +109,19 @@ public class VampirismHelper {
         ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("vampirism", "blood_bottle")));
         setBloodAmount(stack, bloodAmount);
         return stack;
+    }
+
+    /**
+     * 设置实体的毒血状态。仅对 Mob 子类（含 EntityMaid）有效。
+     * 通过 NeoForge DataAttachment 强制创建 ExtendedCreature 并设置 poisonousBlood。
+     */
+    public static void setPoisonousBlood(LivingEntity entity, boolean poisonous) {
+        if (!(entity instanceof net.minecraft.world.entity.Mob mob)) return;
+        if (!isVampirismLoaded()) return;
+        try {
+            mob.getData(VampirismAttachments.EXTENDED_CREATURE).setPoisonousBlood(poisonous);
+        } catch (Exception e) {
+            TLMVMain.LOGGER.warn("[VampirismHelper] Failed to set poisonousBlood={}: {}", poisonous, e.getMessage());
+        }
     }
 }

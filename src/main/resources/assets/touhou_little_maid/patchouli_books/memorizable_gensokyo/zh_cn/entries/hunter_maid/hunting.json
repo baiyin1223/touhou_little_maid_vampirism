@@ -1,0 +1,23 @@
+{
+    "sortnum": 3,
+    "name": "猎杀吸血鬼",
+    "icon": "vampirism:basic_crossbow",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "弩猎杀",
+            "text": "猎人女仆可以装备猎人弩来远程猎杀吸血鬼。$(br2)只需将弩放在女仆主手，箭矢或烟花火箭放在副手或背包中，将女仆切换到“弩猎杀”任务，女仆就会自动搜索并射击范围内的吸血鬼。弩箭会从背包中消耗。$(br2)当女仆等级达到$(bold)Lv.3$()或更高时，可以使用更高级的弩（非基础弩）——这些弩在射击时会$(bold)额外追加一支箭矢$()，大幅提升火力！$(br2)$(bold)$(c)注意：$()血族传说双弩存在已知 Bug——第二支箭矢总是难以命中目标，会出现慢动作反弹或穿透实体落地的现象。即使玩家使用，也很难让两根箭同时命中。这是 Vampirism 模组自身的 bug，非本模组问题。"
+        },
+        {
+            "type": "text",
+            "title": "钉桩猎杀",
+            "text": "猎人女仆也可以装备$(item)钉桩$()来近战猎杀吸血鬼。$(br2)钉桩是吸血鬼的致命武器——当女仆等级达到$(bold)Lv.4$()或更高时，钉桩攻击可以$(bold)秒杀$()所有吸血鬼！"
+        },
+        {
+            "type": "text",
+            "title": "击杀战利品",
+            "text": "猎人女仆击杀吸血鬼时有概率掉落额外战利品：$(br2)$(li)$(item)吸血鬼灵魂$()（vampirism:soul_orb_vampire）$(li)$(item)吸血鬼之血$()（vampirism:vampire_blood_bottle）$(br2)两种任务共享此掉落机制。"
+        }
+    ]
+}

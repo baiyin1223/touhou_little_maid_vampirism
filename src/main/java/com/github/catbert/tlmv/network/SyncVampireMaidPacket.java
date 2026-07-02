@@ -21,23 +21,35 @@ public class SyncVampireMaidPacket implements CustomPacketPayload {
     private final int entityId;
     private final boolean isVampire;
     private final int vampireLevel;
+    private final boolean isHunter;
+    private final int hunterLevel;
 
     public SyncVampireMaidPacket(int entityId, boolean isVampire, int vampireLevel) {
+        this(entityId, isVampire, vampireLevel, false, 0);
+    }
+
+    public SyncVampireMaidPacket(int entityId, boolean isVampire, int vampireLevel, boolean isHunter, int hunterLevel) {
         this.entityId = entityId;
         this.isVampire = isVampire;
         this.vampireLevel = vampireLevel;
+        this.isHunter = isHunter;
+        this.hunterLevel = hunterLevel;
     }
 
     public SyncVampireMaidPacket(FriendlyByteBuf buf) {
         this.entityId = buf.readInt();
         this.isVampire = buf.readBoolean();
         this.vampireLevel = buf.readInt();
+        this.isHunter = buf.readBoolean();
+        this.hunterLevel = buf.readInt();
     }
 
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(entityId);
         buf.writeBoolean(isVampire);
         buf.writeInt(vampireLevel);
+        buf.writeBoolean(isHunter);
+        buf.writeInt(hunterLevel);
     }
 
     @Override
@@ -53,8 +65,10 @@ public class SyncVampireMaidPacket implements CustomPacketPayload {
                     VampireMaidCapability cap = entity.getData(ModAttachments.VAMPIRE_MAID.get());
                     cap.setVampire(packet.isVampire);
                     cap.setVampireLevel(packet.vampireLevel);
-                    TLMVMain.LOGGER.debug("[SyncVampireMaidPacket] Synced vampire state for entity {}: isVampire={}, level={}",
-                            packet.entityId, packet.isVampire, packet.vampireLevel);
+                    cap.setHunter(packet.isHunter);
+                    cap.setHunterLevel(packet.hunterLevel);
+                    TLMVMain.LOGGER.debug("[SyncVampireMaidPacket] Synced state for entity {}: isVampire={}, vLevel={}, isHunter={}, hLevel={}",
+                            packet.entityId, packet.isVampire, packet.vampireLevel, packet.isHunter, packet.hunterLevel);
                 }
             }
         });

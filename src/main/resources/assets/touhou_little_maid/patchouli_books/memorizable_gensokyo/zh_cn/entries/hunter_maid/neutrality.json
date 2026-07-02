@@ -1,0 +1,13 @@
+{
+    "sortnum": 2,
+    "name": "猎人与猎人女仆",
+    "icon": "vampirism:hunter_coat_head_normal",
+    "category": "touhou_little_maid:hunter_maid",
+    "pages": [
+        {
+            "type": "text",
+            "title": "猎人友好关系",
+            "text": "猎人女仆与猎人阵营保持着友好关系。猎人不会主动攻击猎人女仆，即使猎人女仆攻击了猎人，猎人也不会还手。$(br2)这一机制同样意味着猎人女仆不会被猎人视为威胁目标。你可以放心地将猎人女仆派遣到猎人营地附近执行任务。"
+        }
+    ]
+}

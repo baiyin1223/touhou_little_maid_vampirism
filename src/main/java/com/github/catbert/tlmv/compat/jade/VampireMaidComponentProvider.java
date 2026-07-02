@@ -33,11 +33,23 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
             return;
         }
 
+        boolean isHunter = data.getBoolean("isHunter");
+        boolean isInfected = data.getBoolean("isInfected");
+
+        if (isHunter) {
+            int level = data.getInt("hunterLevel");
+            tooltip.add(Component.translatable("tooltip.touhou_little_maid_vampirism.hunter_maid")
+                    .withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("tooltip.touhou_little_maid_vampirism.hunter_level", level));
+            tooltip.add(getHunterRankComponent(level));
+            return;
+        }
+
         int level = data.getInt("vampireLevel");
         tooltip.add(Component.translatable("tooltip.touhou_little_maid_vampirism.vampire_maid")
                 .withStyle(ChatFormatting.DARK_PURPLE));
 
-        if (data.getBoolean("isInfected")) {
+        if (isInfected) {
             int seconds = data.getInt("infectionSeconds");
             tooltip.add(Component.translatable("tooltip.touhou_little_maid_vampirism.infected_seconds", seconds));
         }
@@ -60,10 +72,12 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
         Holder<MobEffect> sanguinare = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath("vampirism", "sanguinare")).orElse(null);
         boolean hasSanguinare = sanguinare != null && entity.hasEffect(sanguinare);
         boolean isVampire = cap.isVampire();
+        boolean isHunter = cap.isHunter();
 
-        if (isVampire || hasSanguinare) {
+        if (isVampire || isHunter || hasSanguinare) {
             data.putBoolean("isVampireMaid", true);
             data.putBoolean("isInfected", hasSanguinare);
+            data.putBoolean("isHunter", isHunter);
 
             if (hasSanguinare && sanguinare != null) {
                 MobEffectInstance effect = entity.getEffect(sanguinare);
@@ -77,11 +91,14 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
                     VampirismAPI.getExtendedCreatureVampirism(mob).ifPresent(ext -> {
                         int blood = ext.getBlood();
                         int maxBlood = ext.getMaxBlood();
-                        // Treat -1 (unregistered entity) as 0
                         data.putInt("bloodLevel", Math.max(0, blood));
                         data.putInt("maxBlood", Math.max(0, maxBlood));
                     });
                 }
+            }
+
+            if (isHunter) {
+                data.putInt("hunterLevel", cap.getHunterLevel());
             }
         }
     }
@@ -93,5 +110,9 @@ public enum VampireMaidComponentProvider implements IEntityComponentProvider, IS
 
     private static Component getVampireRankComponent(int level) {
         return Component.translatable("tooltip.touhou_little_maid_vampirism.vampire_rank." + level);
+    }
+
+    private static Component getHunterRankComponent(int level) {
+        return Component.translatable("tooltip.touhou_little_maid_vampirism.hunter_rank." + level);
     }
 }

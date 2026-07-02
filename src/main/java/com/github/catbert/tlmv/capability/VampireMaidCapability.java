@@ -24,14 +24,17 @@ public class VampireMaidCapability {
             Codec.INT.fieldOf("autoFeedTimer").forGetter(c -> c.autoFeedTimer),
             Codec.STRING.optionalFieldOf("autoFeedTargetUUID").forGetter(c -> c.autoFeedTargetUUID != null ? Optional.of(c.autoFeedTargetUUID.toString()) : Optional.empty()),
             Codec.INT.fieldOf("autoFeedState").forGetter(c -> c.autoFeedState),
-            Codec.INT.fieldOf("autoFeedMoveTimer").forGetter(c -> c.autoFeedMoveTimer)
+            Codec.INT.fieldOf("autoFeedMoveTimer").forGetter(c -> c.autoFeedMoveTimer),
+            Codec.BOOL.optionalFieldOf("isHunter", false).forGetter(c -> c.isHunter),
+            Codec.INT.optionalFieldOf("hunterLevel", 0).forGetter(c -> c.hunterLevel)
     ).apply(instance, VampireMaidCapability::fromCodec));
 
     private static VampireMaidCapability fromCodec(
             boolean isVampire, boolean hadSanguinare, int vampireLevel,
             int lastKnownBlood, int bloodDecayTimer, int slowDecayTimer, int starvationTimer,
             int garlicHpTicker, int garlicBloodTicker,
-            int autoFeedTimer, Optional<String> autoFeedTargetUUID, int autoFeedState, int autoFeedMoveTimer
+            int autoFeedTimer, Optional<String> autoFeedTargetUUID, int autoFeedState, int autoFeedMoveTimer,
+            boolean isHunter, int hunterLevel
     ) {
         VampireMaidCapability cap = new VampireMaidCapability();
         cap.isVampire = isVampire;
@@ -47,12 +50,18 @@ public class VampireMaidCapability {
         cap.autoFeedTargetUUID = autoFeedTargetUUID.map(UUID::fromString).orElse(null);
         cap.autoFeedState = autoFeedState;
         cap.autoFeedMoveTimer = autoFeedMoveTimer;
+        cap.isHunter = isHunter;
+        cap.hunterLevel = hunterLevel;
         return cap;
     }
 
     private boolean isVampire = false;
     private boolean hadSanguinare = false;
     private int vampireLevel = 0;
+
+    // Hunter maid fields
+    private boolean isHunter = false;
+    private int hunterLevel = 0;
 
     // Blood decay tracking fields
     private int lastKnownBlood = 0;  // 0 表示未初始化或无血量
@@ -79,6 +88,22 @@ public class VampireMaidCapability {
 
     public void setVampire(boolean vampire) {
         this.isVampire = vampire;
+    }
+
+    public boolean isHunter() {
+        return isHunter;
+    }
+
+    public void setHunter(boolean hunter) {
+        this.isHunter = hunter;
+    }
+
+    public int getHunterLevel() {
+        return hunterLevel;
+    }
+
+    public void setHunterLevel(int level) {
+        this.hunterLevel = Math.max(0, Math.min(5, level));
     }
 
     public boolean hasHadSanguinare() {
@@ -150,6 +175,17 @@ public class VampireMaidCapability {
             case 4 -> "§7Ⅳ §5蔷薇血侍-";
             case 5 -> "§7Ⅴ §5永夜血姬-";
             default -> "§5吸血鬼-";
+        };
+    }
+
+    public static String getHunterDisplayPrefix(int level) {
+        return switch (level) {
+            case 1 -> "§7Ⅰ §b女仆猎人学徒-";
+            case 2 -> "§7Ⅱ §b女仆猎人斥候-";
+            case 3 -> "§7Ⅲ §b女仆猎人精英-";
+            case 4 -> "§7Ⅳ §b女仆猎人大师-";
+            case 5 -> "§7Ⅴ §b猎魔女仆-";
+            default -> "§b猎人-";
         };
     }
 

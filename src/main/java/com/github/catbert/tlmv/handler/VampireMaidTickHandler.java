@@ -4,6 +4,7 @@ import com.github.catbert.tlmv.TLMVMain;
 import com.github.catbert.tlmv.capability.ModAttachments;
 import com.github.catbert.tlmv.capability.VampireMaidCapability;
 import com.github.catbert.tlmv.config.subconfig.BloodConfig;
+import com.github.catbert.tlmv.level.HunterLevelManager;
 import com.github.catbert.tlmv.level.VampireLevelManager;
 import com.github.catbert.tlmv.meal.VampireMaidFoodFilter;
 import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
@@ -119,6 +120,24 @@ public class VampireMaidTickHandler {
                 );
             }
         }
+
+        // Hunter maid handling
+        if (cap.isHunter() && living instanceof EntityMaid maid) {
+            // 每30秒刷新等级buff
+            if (maid.tickCount % 600 == 0 && cap.getHunterLevel() > 0) {
+                HunterLevelManager.applyLevelBuffs(maid, cap.getHunterLevel());
+            }
+            // 首次检测到等级时应用属性
+            if (maid.tickCount % 600 == 1 && cap.getHunterLevel() > 0) {
+                HunterLevelManager.applyLevelAttributes(maid, cap.getHunterLevel());
+            }
+            // 每5秒同步猎人状态到客户端
+            if (maid.tickCount % 100 == 0) {
+                PacketDistributor.sendToPlayersTrackingEntity(maid,
+                        new SyncVampireMaidPacket(maid.getId(), cap.isVampire(), cap.getVampireLevel(), cap.isHunter(), cap.getHunterLevel())
+                );
+            }
+        }
     }
 
     @SubscribeEvent
@@ -130,7 +149,7 @@ public class VampireMaidTickHandler {
         if (target instanceof LivingEntity living) {
             VampireMaidCapability trackCap = living.getData(ModAttachments.VAMPIRE_MAID.get());
             PacketDistributor.sendToPlayer((ServerPlayer) event.getEntity(),
-                    new SyncVampireMaidPacket(target.getId(), trackCap.isVampire(), trackCap.getVampireLevel())
+                    new SyncVampireMaidPacket(target.getId(), trackCap.isVampire(), trackCap.getVampireLevel(), trackCap.isHunter(), trackCap.getHunterLevel())
             );
         }
     }
