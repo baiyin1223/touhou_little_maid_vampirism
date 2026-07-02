@@ -6,6 +6,7 @@ import com.github.catbert.tlmv.level.HunterLevelManager;
 import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
 import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -53,6 +54,8 @@ public class HunterConversionHandler {
         cap.setHunter(true);
         cap.setHunterLevel(1);
         cap.setPoisonousBlood(true);
+        // Write to Vampirism ExtendedCreature (actual poison mechanics)
+        VampirismAPI.getExtendedCreatureVampirism(maid).ifPresent(ext -> ext.setPoisonousBlood(true));
         HunterLevelManager.applyLevel(maid, 1);
 
         // Visual effect

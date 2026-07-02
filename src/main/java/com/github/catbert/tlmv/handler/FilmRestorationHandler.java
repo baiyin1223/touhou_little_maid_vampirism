@@ -6,6 +6,7 @@ import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
 import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAndItemTransformEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
@@ -38,6 +39,7 @@ public class FilmRestorationHandler {
         }
 
         CompoundTag capData = forgeCaps.getCompound(CAP_KEY);
+        pendingRestore.put(event.getMaid().getUUID(), capData);
         ModCapabilities.getVampireMaid(event.getMaid()).ifPresent(cap -> cap.deserializeNBT(capData));
     }
 
@@ -48,6 +50,9 @@ public class FilmRestorationHandler {
         if (capData == null) return;
         ModCapabilities.getVampireMaid(maid).ifPresent(cap -> {
             cap.deserializeNBT(capData);
+            // Restore Vampirism poisonousBlood flag from capability
+            VampirismAPI.getExtendedCreatureVampirism(maid).ifPresent(ext ->
+                    ext.setPoisonousBlood(cap.isPoisonousBlood()));
             Entity entity = maid;
             TLMVNetwork.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity),
                     new SyncVampireMaidPacket(entity.getId(), cap.isVampire(), cap.getVampireLevel(), cap.isHunter(), cap.getHunterLevel()));

@@ -9,12 +9,14 @@ import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
@@ -96,6 +98,10 @@ public class VampirismMaidCommand {
             cap.setHadSanguinare(false);
             cap.setHunter(false);
             cap.setHunterLevel(0);
+            cap.setPoisonousBlood(false);
+            if (target instanceof PathfinderMob mob) {
+                VampirismAPI.getExtendedCreatureVampirism(mob).ifPresent(ext -> ext.setPoisonousBlood(false));
+            }
             source.sendSuccess(() -> Component.literal("已将女仆恢复为普通状态"), true);
         }
 
@@ -190,10 +196,18 @@ public class VampirismMaidCommand {
             }
             cap.setHunter(true);
             cap.setHunterLevel(1);
+            cap.setPoisonousBlood(true);
+            if (target instanceof PathfinderMob mob) {
+                VampirismAPI.getExtendedCreatureVampirism(mob).ifPresent(ext -> ext.setPoisonousBlood(true));
+            }
             source.sendSuccess(() -> Component.literal("已将女仆转变为猎人"), true);
         } else {
             cap.setHunter(false);
             cap.setHunterLevel(0);
+            cap.setPoisonousBlood(false);
+            if (target instanceof PathfinderMob mob) {
+                VampirismAPI.getExtendedCreatureVampirism(mob).ifPresent(ext -> ext.setPoisonousBlood(false));
+            }
             source.sendSuccess(() -> Component.literal("已将女仆恢复为普通状态"), true);
         }
 
