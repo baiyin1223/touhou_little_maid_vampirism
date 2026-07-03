@@ -113,9 +113,8 @@ public class MaidFoodHandler {
                             restoreAmount = bloodToConsume;
                             TLMVMain.LOGGER.debug("[MaidFoodHandler] Blood bottle consumed: amount={}, damage={}/{}",
                                     bloodToConsume, result.getDamageValue(), result.getMaxDamage());
-                        } else {
-                            result.shrink(1);
                         }
+                        // 非血瓶物品：eat() 已 shrink(1)，无需额外消耗
                         event.setResultStack(result);
                     }
 
