@@ -195,12 +195,16 @@ public class VampireMaidTickHandler {
                         return;
                     }
                     // 非血瓶的血液食物走正常 startUsingItem 路径
-                    ItemStack mainHandItem = maid.getMainHandItem().copy();
-                    maid.setItemInHand(InteractionHand.MAIN_HAND, extracted);
-                    maid.memoryHandItemStack(mainHandItem);
-                    maid.startUsingItem(InteractionHand.MAIN_HAND);
+                    // 手部选择：优先空主手 → 否则副手（避免替换主手武器导致攻击目标丢失）
+                    InteractionHand feedHand = maid.getMainHandItem().isEmpty()
+                            ? InteractionHand.MAIN_HAND
+                            : InteractionHand.OFF_HAND;
+                    ItemStack handItem = maid.getItemInHand(feedHand).copy();
+                    maid.setItemInHand(feedHand, extracted);
+                    maid.memoryHandItemStack(handItem);
+                    maid.startUsingItem(feedHand);
                     FEEDING_MAIDS.add(maid.getUUID());
-                    TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: {}", extracted);
+                    TLMVMain.LOGGER.debug("[VampireMaidTickHandler] Triggered feeding: hand={}, item={}", feedHand, extracted);
                     return;
                 }
             }
