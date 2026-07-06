@@ -29,6 +29,10 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
     // Garlic slowness tracking
     private transient boolean applyingSlowness = false;
 
+    // Attribute modifier tracking: last level applied via AttributeModifier
+    // Transient: reset to 0 on world load triggers re-application on first tick
+    private transient int lastAppliedVampireLevel = 0;
+
     // Auto-feed state tracking fields
     private int autoFeedTimer = 0;           // 觅血间隔计时器
     private java.util.UUID autoFeedTargetUUID = null;  // 当前觅血目标 UUID
@@ -106,6 +110,9 @@ public class VampireMaidCapability implements INBTSerializable<CompoundTag> {
 
     public int getAutoFeedMoveTimer() { return autoFeedMoveTimer; }
     public void setAutoFeedMoveTimer(int timer) { this.autoFeedMoveTimer = timer; }
+
+    public int getLastAppliedVampireLevel() { return lastAppliedVampireLevel; }
+    public void setLastAppliedVampireLevel(int level) { this.lastAppliedVampireLevel = level; }
 
     /** 重置自动觅血状态到 IDLE */
     public void resetAutoFeedState() {

@@ -30,6 +30,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -52,6 +53,17 @@ public class VampireMaidTickHandler {
 
     // VNU (VampiresNeedUmbrellas) 可选联动：零编译依赖，通过 Registry Name 检测
     private static final boolean VNU_LOADED = ModList.get().isLoaded("vampiresneedumbrellas");
+
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (!(event.getEntity() instanceof EntityMaid maid)) return;
+
+        ModCapabilities.getVampireMaid(maid).ifPresent(cap -> {
+            // 实体加入世界时（含胶片复活），重置 lastApplied 以触发 tick 中的重新应用
+            cap.setLastAppliedVampireLevel(0);
+        });
+    }
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
@@ -80,17 +92,20 @@ public class VampireMaidTickHandler {
                     }
                 }
 
-                // 每30秒刷新等级buff，确保永久生效（应对死亡重生等情况）
-                if (mob.tickCount % 600 == 0 && cap.getVampireLevel() > 0) {
-                    if (mob instanceof EntityMaid maid) {
-                        VampireLevelManager.applyLevelBuffs(maid, cap.getVampireLevel());
+                // 等级变化检测：当前等级与上次已应用等级不同时，重新应用属性修正
+                if (mob instanceof EntityMaid maid) {
+                    int currentLevel = cap.getVampireLevel();
+                    if (currentLevel != cap.getLastAppliedVampireLevel()) {
+                        if (currentLevel > 0) {
+                            VampireLevelManager.applyLevelAttributes(maid, currentLevel);
+                        } else {
+                            VampireLevelManager.removeLevelModifiers(maid);
+                        }
+                        cap.setLastAppliedVampireLevel(currentLevel);
                     }
-                }
-
-                // 女仆首次检测到等级时（如世界加载后第一个 tick），也应用一次属性
-                if (mob.tickCount % 600 == 1 && cap.getVampireLevel() > 0) {
-                    if (mob instanceof EntityMaid maid) {
-                        VampireLevelManager.applyLevelAttributes(maid, cap.getVampireLevel());
+                    // 每30秒刷新等级buff（药水效果，不受AttributeModifier影响）
+                    if (mob.tickCount % 600 == 0 && currentLevel > 0) {
+                        VampireLevelManager.applyLevelBuffs(maid, currentLevel);
                     }
                 }
 
