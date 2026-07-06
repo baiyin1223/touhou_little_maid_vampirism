@@ -36,6 +36,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -53,6 +54,18 @@ public class VampireMaidTickHandler {
 
     // VNU (VampiresNeedUmbrellas) 可选联动：零编译依赖，通过 Registry Name 检测
     private static final boolean VNU_LOADED = ModList.get().isLoaded("vampiresneedumbrellas");
+
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (!(event.getEntity() instanceof EntityMaid maid)) return;
+
+        VampireMaidCapability cap = maid.getData(ModAttachments.VAMPIRE_MAID.get());
+
+        // 实体加入世界时（含胶片复活），重置 lastApplied 以触发 tick 中的重新应用
+        cap.setLastAppliedVampireLevel(0);
+        cap.setLastAppliedHunterLevel(0);
+    }
 
     @SubscribeEvent
     public static void onLivingTick(EntityTickEvent.Post event) {
@@ -81,17 +94,20 @@ public class VampireMaidTickHandler {
                 }
             }
 
-            // 每30秒刷新等级buff，确保永久生效（应对死亡重生等情况）
-            if (mob.tickCount % 600 == 0 && cap.getVampireLevel() > 0) {
-                if (mob instanceof EntityMaid maid) {
-                    VampireLevelManager.applyLevelBuffs(maid, cap.getVampireLevel());
+            // 等级变化检测：当前等级与上次已应用等级不同时，重新应用属性修正
+            if (mob instanceof EntityMaid maid) {
+                int currentLevel = cap.getVampireLevel();
+                if (currentLevel != cap.getLastAppliedVampireLevel()) {
+                    if (currentLevel > 0) {
+                        VampireLevelManager.applyLevelAttributes(maid, currentLevel);
+                    } else {
+                        VampireLevelManager.removeLevelModifiers(maid);
+                    }
+                    cap.setLastAppliedVampireLevel(currentLevel);
                 }
-            }
-
-            // 女仆首次检测到等级时（如世界加载后第一个 tick），也应用一次属性
-            if (mob.tickCount % 600 == 1 && cap.getVampireLevel() > 0) {
-                if (mob instanceof EntityMaid maid) {
-                    VampireLevelManager.applyLevelAttributes(maid, cap.getVampireLevel());
+                // 每30秒刷新等级buff（药水效果，不受AttributeModifier影响）
+                if (mob.tickCount % 600 == 0 && currentLevel > 0) {
+                    VampireLevelManager.applyLevelBuffs(maid, currentLevel);
                 }
             }
 
@@ -123,13 +139,19 @@ public class VampireMaidTickHandler {
 
         // Hunter maid handling
         if (cap.isHunter() && living instanceof EntityMaid maid) {
-            // 每30秒刷新等级buff
-            if (maid.tickCount % 600 == 0 && cap.getHunterLevel() > 0) {
-                HunterLevelManager.applyLevelBuffs(maid, cap.getHunterLevel());
+            // 等级变化检测：当前等级与上次已应用等级不同时，重新应用属性修正
+            int hunterLevel = cap.getHunterLevel();
+            if (hunterLevel != cap.getLastAppliedHunterLevel()) {
+                if (hunterLevel > 0) {
+                    HunterLevelManager.applyLevelAttributes(maid, hunterLevel);
+                } else {
+                    HunterLevelManager.removeLevelModifiers(maid);
+                }
+                cap.setLastAppliedHunterLevel(hunterLevel);
             }
-            // 首次检测到等级时应用属性
-            if (maid.tickCount % 600 == 1 && cap.getHunterLevel() > 0) {
-                HunterLevelManager.applyLevelAttributes(maid, cap.getHunterLevel());
+            // 每30秒刷新等级buff（药水效果）
+            if (maid.tickCount % 600 == 0 && hunterLevel > 0) {
+                HunterLevelManager.applyLevelBuffs(maid, hunterLevel);
             }
             // 每5秒同步猎人状态到客户端
             if (maid.tickCount % 100 == 0) {

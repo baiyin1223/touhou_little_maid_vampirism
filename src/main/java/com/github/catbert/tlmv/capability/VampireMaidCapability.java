@@ -73,6 +73,11 @@ public class VampireMaidCapability {
     private int garlicHpTicker = 0;       // 大蒜HP伤害计时器
     private int garlicBloodTicker = 0;    // 大蒜额外blood消耗计时器
 
+    // Attribute modifier tracking: last level applied via AttributeModifier
+    // Transient: reset to 0 on world load triggers re-application on first tick
+    private transient int lastAppliedVampireLevel = 0;
+    private transient int lastAppliedHunterLevel = 0;
+
     // Garlic slowness tracking
     private transient boolean applyingSlowness = false;
 
@@ -105,6 +110,12 @@ public class VampireMaidCapability {
     public void setHunterLevel(int level) {
         this.hunterLevel = Math.max(0, Math.min(5, level));
     }
+
+    public int getLastAppliedVampireLevel() { return lastAppliedVampireLevel; }
+    public void setLastAppliedVampireLevel(int level) { this.lastAppliedVampireLevel = level; }
+
+    public int getLastAppliedHunterLevel() { return lastAppliedHunterLevel; }
+    public void setLastAppliedHunterLevel(int level) { this.lastAppliedHunterLevel = level; }
 
     public boolean hasHadSanguinare() {
         return hadSanguinare;
