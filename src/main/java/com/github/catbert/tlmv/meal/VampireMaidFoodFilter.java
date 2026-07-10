@@ -34,6 +34,10 @@ public class VampireMaidFoodFilter {
             if ("blood_bottle".equals(key.getPath())) {
                 return VampirismHelper.hasBlood(stack);
             }
+            // 排除 garlic_bread（非血液食物）
+            if ("garlic_bread".equals(key.getPath())) {
+                return false;
+            }
             // 3. 其他 vampirism 物品（包括 human_heart、rotten_heart 等心脏物品）视为血液食物
             return true;
         }

@@ -122,7 +122,7 @@ public class InfectionHandler {
         if (!isMaidEntity(entity)) return;
 
         VampireMaidCapability expiredCap = entity.getData(ModAttachments.VAMPIRE_MAID.get());
-        if (!expiredCap.isVampire()) {
+        if (!expiredCap.isVampire() && !expiredCap.isHunter()) {
             expiredCap.setVampire(true);
             expiredCap.setVampireLevel(1);
             expiredCap.setHadSanguinare(false);
@@ -158,7 +158,7 @@ public class InfectionHandler {
         // When externally cleared, the duration is typically much higher.
         // We use a threshold of 5 ticks as a safety margin.
         VampireMaidCapability removedCap = entity.getData(ModAttachments.VAMPIRE_MAID.get());
-        if (removedCap.hasHadSanguinare() && !removedCap.isVampire()) {
+        if (removedCap.hasHadSanguinare() && !removedCap.isVampire() && !removedCap.isHunter()) {
             int remainingDuration = effectInstance != null ? effectInstance.getDuration() : 0;
             if (remainingDuration <= 5) {
                 // Duration is very low — this is a natural expiry triggered by Vampirism's applyEffectTick
