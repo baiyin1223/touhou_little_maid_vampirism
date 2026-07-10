@@ -141,6 +141,10 @@ public class MaidFoodHandler {
                 if (entity instanceof EntityMaid maid) {
                     maid.spawnHeartParticle();
                     maid.setFavorability(maid.getFavorability() + 1);
+                    // 恢复 HP（模拟 TLM DefaultMaidHealSelfMeal 回血逻辑）
+                    if (!isBloodBottle(stack)) {
+                        maid.heal(4.0F);
+                    }
                 }
 
                 // 移除原版机制可能添加的负面效果

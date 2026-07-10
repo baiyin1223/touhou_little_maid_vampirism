@@ -86,7 +86,7 @@ public class InfectionHandler {
     private static boolean tryInfectMaid(LivingEntity maid) {
         return ModCapabilities.getVampireMaid(maid).map(cap -> {
             MobEffect sanguinare = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("vampirism", "sanguinare"));
-            if (cap.isVampire() || (sanguinare != null && maid.hasEffect(sanguinare))) {
+            if (cap.isVampire() || cap.isHunter() || (sanguinare != null && maid.hasEffect(sanguinare))) {
                 return false;
             }
             if (sanguinare != null) {
@@ -121,7 +121,7 @@ public class InfectionHandler {
         if (!isMaidEntity(entity)) return;
 
         ModCapabilities.getVampireMaid(entity).ifPresent(cap -> {
-            if (!cap.isVampire()) {
+            if (!cap.isVampire() && !cap.isHunter()) {
                 cap.setVampire(true);
                 cap.setVampireLevel(1);
                 cap.setHadSanguinare(false);

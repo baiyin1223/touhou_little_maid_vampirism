@@ -7,10 +7,12 @@ import com.github.catbert.tlmv.network.SyncVampireMaidPacket;
 import com.github.catbert.tlmv.network.TLMVNetwork;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import de.teamlapen.vampirism.api.VampirismAPI;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +49,14 @@ public class HunterConversionHandler {
             return;
         }
         if (cap.isHunter()) {
-            player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.touhou_little_maid_vampirism.already_hunter"), true);
+            player.displayClientMessage(Component.translatable("message.touhou_little_maid_vampirism.already_hunter"), true);
+            return;
+        }
+
+        // Cannot convert if currently infected with sanguinare
+        MobEffect sanguinare = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("vampirism", "sanguinare"));
+        if (sanguinare != null && maid.hasEffect(sanguinare)) {
+            player.displayClientMessage(Component.translatable("message.touhou_little_maid_vampirism.cannot_convert_infected"), true);
             return;
         }
 

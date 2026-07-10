@@ -126,6 +126,7 @@
     "gui.touhou_little_maid_vampirism.revert_hunter.desc": "Are you sure you want to revert this maid to normal? All hunter abilities will be cleared.",
     "message.touhou_little_maid_vampirism.already_hunter": "This maid is already a hunter maid",
     "message.touhou_little_maid_vampirism.cannot_convert_vampire": "Vampire maids cannot be converted to hunter maids",
+      "message.touhou_little_maid_vampirism.cannot_convert_infected": "Cannot convert a maid currently infected with Sanguinare",
     "message.touhou_little_maid_vampirism.not_hunter": "Target maid is not a hunter maid",
     "message.touhou_little_maid_vampirism.hunter_level_set": "Maid hunter level set to %d",
     "tooltip.touhou_little_maid_vampirism.hunter_maid": "Hunter Maid",

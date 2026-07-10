@@ -126,6 +126,7 @@
     "gui.touhou_little_maid_vampirism.revert_hunter.desc": "确定要让该女仆变回普通女仆吗？将清除所有猎人能力。",
     "message.touhou_little_maid_vampirism.already_hunter": "该女仆已经是猎人女仆了",
     "message.touhou_little_maid_vampirism.cannot_convert_vampire": "吸血鬼女仆不能被转化为猎人女仆",
+      "message.touhou_little_maid_vampirism.cannot_convert_infected": "该女仆正在被吸血之疾感染，无法转化",
     "message.touhou_little_maid_vampirism.not_hunter": "目标女仆不是猎人女仆",
     "message.touhou_little_maid_vampirism.hunter_level_set": "已将女仆的猎人等级设为 %d",
     "tooltip.touhou_little_maid_vampirism.hunter_maid": "猎人女仆",
